@@ -1,0 +1,3493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mauro — Tu guía de maternidad</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAFAF7;
+    --cream-mid: #F0EBE3;
+    --green-dark: #2D5016;
+    --green-mid: #4A7C2F;
+    --green-light: #E8F0E0;
+    --terra: #C4694F;
+    --terra-light: #F7EAE6;
+    --amber: #D48B2F;
+    --amber-light: #FBF2E0;
+    --blue: #2B5F8A;
+    --blue-light: #E4EFF7;
+    --text: #1A1810;
+    --text-mid: #5A5748;
+    --text-light: #9A9488;
+    --border: #E2DBD0;
+    --white: #FFFFFF;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    background: var(--green-dark);
+    padding: 20px 20px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .app-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--white);
+    letter-spacing: -0.3px;
+  }
+
+  .app-header p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 2px;
+  }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 480px;
+    background: var(--white);
+    border-top: 1px solid var(--border);
+    display: flex;
+    z-index: 100;
+  }
+
+  .nav-btn {
+    flex: 1;
+    padding: 10px 4px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    transition: all 0.15s;
+  }
+
+  .nav-btn .nav-icon { font-size: 1.3rem; }
+  .nav-btn .nav-label { font-size: 0.62rem; font-weight: 500; color: var(--text-light); font-family: 'Inter', sans-serif; }
+  .nav-btn.active .nav-label { color: var(--green-dark); font-weight: 600; }
+  .nav-btn.active .nav-icon { filter: none; }
+
+  .nav-btn.terra.active .nav-label { color: var(--terra); }
+
+  /* ── SCREENS ── */
+  .screen { display: none; padding: 16px; }
+  .screen.active { display: block; }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 10px;
+  }
+
+  /* ── AGE DISPLAY ── */
+  .age-hero {
+    background: var(--green-dark);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    margin-bottom: 12px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .age-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .age-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .age-label {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .age-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .age-weeks {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 16px;
+  }
+
+  /* Circular progress */
+  .age-ring {
+    width: 90px;
+    height: 90px;
+    margin: 0 auto 12px;
+    position: relative;
+  }
+
+  .age-ring svg { transform: rotate(-90deg); }
+  .age-ring-bg { fill: none; stroke: rgba(255,255,255,0.15); stroke-width: 6; }
+  .age-ring-fill { fill: none; stroke: #8BC34A; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+  .age-ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .age-ring-months {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .age-ring-unit {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── INPUT FECHA ── */
+  .date-input-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .date-input-wrap input[type="date"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+  }
+
+  .date-input-wrap input[type="date"]:focus {
+    border-color: var(--green-mid);
+  }
+
+  .btn-primary {
+    padding: 10px 16px;
+    background: var(--green-dark);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* ── HITOS ── */
+  .hito {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .hito:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .hito-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .hito-dot.ok { background: var(--green-mid); }
+  .hito-dot.soon { background: var(--amber); }
+  .hito-dot.future { background: var(--border); }
+
+  .hito-text { flex: 1; }
+  .hito-title { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .hito-desc { font-size: 0.75rem; color: var(--text-mid); line-height: 1.4; }
+  .hito-when { font-size: 0.68rem; color: var(--text-light); margin-top: 2px; }
+
+  /* ── ETAPA BADGE ── */
+  .etapa-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--green-light);
+    color: var(--green-dark);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+
+  /* ── JUEGOS ── */
+  .juego-card {
+    background: var(--cream);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+  .juego-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .juego-icon {
+    font-size: 1.5rem;
+    width: 36px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .juego-titulo {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .juego-tag {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .juego-tag.motor { background: #E8F0E0; color: #2D5016; }
+  .juego-tag.cognitivo { background: #E4EFF7; color: #2B5F8A; }
+  .juego-tag.social { background: #FBF2E0; color: #7A4F00; }
+  .juego-tag.lenguaje { background: #EEE8F7; color: #4A2D8A; }
+  .juego-tag.sensorial { background: #F7E8EE; color: #8A2D5A; }
+  .juego-desc {
+    font-size: 0.75rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+    margin-left: 46px;
+  }
+  .juego-tip {
+    font-size: 0.7rem;
+    color: var(--green-dark);
+    font-weight: 500;
+    margin-top: 5px;
+    margin-left: 46px;
+  }
+
+  /* ── NUTRICION ── */
+  .semana-tab {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 12px;
+    scrollbar-width: none;
+  }
+
+  .semana-tab::-webkit-scrollbar { display: none; }
+
+  .stab {
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+
+  .stab.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--white);
+  }
+
+  .alimento-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+
+  .alimento-item:last-child { border-bottom: none; }
+
+  .alimento-tex {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .tex-verde { background: #E8F0E0; color: #2D5016; }
+  .tex-amber { background: #FBF2E0; color: #8B5E0A; }
+  .tex-blue { background: #E4EFF7; color: #2B5F8A; }
+  .tex-purple { background: #EEE8F7; color: #4A2D8A; }
+  .tex-rose { background: #F7E8EE; color: #8A2D5A; }
+
+  .alimento-info { flex: 1; }
+  .alimento-nombre { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .alimento-como { font-size: 0.74rem; color: var(--text-mid); margin-top: 2px; line-height: 1.4; }
+
+  .warn-tag {
+    display: inline-block;
+    font-size: 0.64rem;
+    font-weight: 700;
+    background: var(--terra-light);
+    color: var(--terra);
+    padding: 1px 5px;
+    border-radius: 5px;
+    margin-left: 4px;
+  }
+
+  .ok-tag {
+    display: inline-block;
+    font-size: 0.64rem;
+    font-weight: 700;
+    background: var(--green-light);
+    color: var(--green-dark);
+    padding: 1px 5px;
+    border-radius: 5px;
+    margin-left: 4px;
+  }
+
+  /* ── RABIETAS ── */
+  .fase-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+
+  .fase-head {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .fase-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .fase-head-text { flex: 1; }
+  .fase-head-title { font-size: 0.88rem; font-weight: 700; }
+  .fase-head-sub { font-size: 0.72rem; opacity: 0.75; margin-top: 1px; }
+
+  .fase-body {
+    padding: 12px 14px;
+    background: var(--white);
+  }
+
+  .fase-do {
+    font-size: 0.82rem;
+    color: var(--text);
+    line-height: 1.6;
+    margin-bottom: 6px;
+  }
+
+  .fase-dont {
+    font-size: 0.76rem;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  .f1 .fase-head { background: #FEF9E7; }
+  .f1 .fase-num { background: #F5D60D; color: #5A4A00; }
+  .f1 .fase-head-title { color: #7D6608; }
+
+  .f2 .fase-head { background: var(--terra-light); }
+  .f2 .fase-num { background: var(--terra); color: var(--white); }
+  .f2 .fase-head-title { color: var(--terra); }
+
+  .f3 .fase-head { background: var(--green-light); }
+  .f3 .fase-num { background: var(--green-mid); color: var(--white); }
+  .f3 .fase-head-title { color: var(--green-dark); }
+
+  /* Hack cards */
+  .hack-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .hack-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+  }
+
+  .hack-emoji { font-size: 1.4rem; margin-bottom: 6px; display: block; }
+  .hack-name { font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .hack-desc { font-size: 0.7rem; color: var(--text-mid); line-height: 1.4; }
+
+  /* Key phrase */
+  .key-phrase {
+    background: var(--green-dark);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .key-phrase p {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1rem;
+    color: var(--white);
+    line-height: 1.5;
+  }
+
+  .key-phrase span { color: #8BC34A; }
+
+  /* Tip box */
+  .tip-box {
+    background: var(--green-light);
+    border-left: 3px solid var(--green-mid);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: var(--green-dark);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .tip-box strong { color: var(--green-dark); font-weight: 700; }
+
+  .warn-box {
+    background: var(--terra-light);
+    border-left: 3px solid var(--terra);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: var(--terra);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  /* ── SIESTAS ── */
+  .siesta-log {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .siesta-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .siesta-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--blue);
+    flex-shrink: 0;
+  }
+
+  .siesta-info { flex: 1; }
+  .siesta-time { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+  .siesta-dur { font-size: 0.72rem; color: var(--text-mid); }
+
+  .siesta-delete {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px;
+  }
+
+  .siesta-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-label { font-size: 0.7rem; font-weight: 600; color: var(--text-mid); }
+
+  .form-input {
+    padding: 9px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    width: 100%;
+  }
+
+  .form-input:focus { border-color: var(--blue); }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 11px;
+    background: var(--blue);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .total-siestas {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .total-card {
+    flex: 1;
+    background: var(--blue-light);
+    border-radius: var(--radius-sm);
+    padding: 10px;
+    text-align: center;
+  }
+
+  .total-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--blue);
+  }
+
+  .total-label { font-size: 0.68rem; color: var(--text-mid); }
+
+  /* ventana info */
+  .ventana-info {
+    background: var(--amber-light);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 0.76rem;
+    color: #7A4F00;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+
+  /* section divider */
+  .sec-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin: 16px 0 8px;
+  }
+
+  /* nunca list */
+  .nunca-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .nunca-tag {
+    background: var(--terra-light);
+    color: var(--terra);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+
+  .timer-reset {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: var(--cream);
+    color: var(--text-mid);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .tipo-tab {
+    flex: 1;
+    padding: 7px 4px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .tipo-tab.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--white);
+  }
+
+  /* ── ALÉRGENOS ── */
+  .alergeno-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .alergeno-card {
+    background: var(--terra-light);
+    border: 1px solid #f0c4b8;
+    border-radius: 10px;
+    padding: 8px 6px;
+    text-align: center;
+  }
+
+  .al-emoji { font-size: 1.3rem; margin-bottom: 3px; }
+  .al-name { font-size: 0.72rem; font-weight: 700; color: var(--terra); margin-bottom: 2px; }
+  .al-como { font-size: 0.62rem; color: #8a4030; line-height: 1.3; }
+
+  /* ── TIMERS ── */
+  .timer-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .timer-label { flex: 1; }
+  .timer-title { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+  .timer-sub { font-size: 0.68rem; color: var(--text-light); margin-top: 1px; }
+
+  .timer-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+    color: var(--green-dark);
+    min-width: 44px;
+    text-align: center;
+  }
+
+  .timer-display.running { color: var(--terra); }
+  .timer-display.done { color: var(--green-mid); }
+
+  .timer-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--green-dark);
+    color: var(--white);
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .timer-btn.running { background: var(--terra); }
+  .timer-btn.done { background: var(--green-mid); }
+
+  /* ── SUB TABS ── */
+  .sub-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    background: var(--cream-mid);
+    border-radius: 10px;
+    padding: 4px;
+  }
+
+  .sub-tab {
+    flex: 1;
+    padding: 7px 4px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .sub-tab.active {
+    background: var(--white);
+    color: var(--green-dark);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  /* ── TOMA TABS ── */
+  .toma-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+  }
+
+  .toma-tab {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .toma-tab.active {
+    background: var(--green-dark);
+    border-color: var(--green-dark);
+    color: var(--white);
+  }
+
+  /* ── DIARIO ── */
+  .diario-toma-block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .diario-toma-head {
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .diario-toma-items { padding: 0 12px 8px; }
+
+  .diario-alimento-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .diario-alimento-item:last-child { border-bottom: none; }
+
+  .diario-del {
+    background: none;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .desayuno-head { background: #FBF2E0; color: #7A4F00; }
+  .comida-head   { background: var(--green-light); color: var(--green-dark); }
+  .merienda-head { background: var(--terra-light); color: var(--terra); }
+  .cena-head     { background: var(--blue-light); color: var(--blue); }
+
+  @media (max-width: 380px) {
+    .hack-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <h1>🌱 Guía de Mauro</h1>
+  <p id="header-subtitle">Tu compañera de maternidad</p>
+</div>
+
+<!-- SCREENS -->
+
+<!-- ── INICIO ── -->
+<div class="screen active" id="screen-inicio">
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Fecha de nacimiento</div>
+    <div class="date-input-wrap">
+      <input type="date" id="birth-date" value="2026-03-15">
+      <button class="btn-primary" onclick="calcularEdad()">Calcular</button>
+    </div>
+  </div>
+
+  <div id="age-display" style="display:none">
+
+    <div class="age-hero">
+      <div class="age-label">Edad de Mauro</div>
+      <div class="age-ring">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle class="age-ring-bg" cx="45" cy="45" r="38"/>
+          <circle class="age-ring-fill" id="ring-fill" cx="45" cy="45" r="38"
+            stroke-dasharray="238.76"
+            stroke-dashoffset="238.76"/>
+        </svg>
+        <div class="age-ring-center">
+          <div class="age-ring-months" id="ring-months">0</div>
+          <div class="age-ring-unit">meses</div>
+        </div>
+      </div>
+      <div class="age-name" id="age-text">—</div>
+      <div class="age-weeks" id="age-weeks">—</div>
+    </div>
+
+    <div class="card">
+      <div class="etapa-badge" id="etapa-badge">🌱 Etapa actual</div>
+      <div class="card-title">Hitos que deberías ver ahora</div>
+      <div id="hitos-list"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Próximamente</div>
+      <div id="hitos-proximos"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🧩 Juegos y estimulación ahora</div>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:12px">Actividades recomendadas para su edad</div>
+      <div id="juegos-list"></div>
+    </div>
+
+  </div>
+
+  <div id="age-placeholder" class="card" style="text-align:center; padding:32px 16px; color:var(--text-light)">
+    <div style="font-size:2rem; margin-bottom:8px">👆</div>
+    <div style="font-size:0.85rem">Introduce la fecha de nacimiento para ver los hitos de desarrollo</div>
+  </div>
+
+</div>
+
+<!-- ── NUTRICION ── -->
+<div class="screen" id="screen-nutricion">
+  <div style="margin-top:16px">
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showNutriTab('guia', this)">📋 Guía</button>
+      <button class="sub-tab" onclick="showNutriTab('diario', this)">📅 Diario</button>
+      <button class="sub-tab" onclick="showNutriTab('seguridad', this)">🚨 Seguridad</button>
+    </div>
+
+    <div id="nutri-guia">
+      <div class="key-phrase" style="padding:12px 16px; margin-bottom:12px">
+        <p style="font-size:0.88rem">La leche es lo principal hasta los 12 meses.<br><span>La comida complementa, no sustituye.</span></p>
+      </div>
+      <div class="tip-box"><strong>Cuándo empezar:</strong> 3 signos juntos — sentado con apoyo, sin reflejo de extrusión, interés real por la comida.</div>
+      <div class="card-title" style="margin-top:8px">Semanas de introducción</div>
+      <div class="semana-tab" id="semana-tabs"></div>
+      <div id="semana-content"></div>
+      <div class="sec-label">Los 8 alérgenos principales</div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-size:0.74rem;color:var(--text-mid);margin-bottom:10px;line-height:1.5">⚠️ Introduce <strong>uno a uno</strong>, con <strong>3-5 días</strong> de observación entre cada uno. Siempre a <strong>mediodía</strong>, en casa, nunca en el cole ni fuera. Observa 12h tras la introducción.</div>
+        <div class="alergeno-grid">
+          <div class="alergeno-card">
+            <div class="al-emoji">🌾</div>
+            <div class="al-name">Gluten</div>
+            <div class="al-como">Pan blando sin sal o pasta muy cocida</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🥚</div>
+            <div class="al-name">Huevo</div>
+            <div class="al-como">Primero yema cocida, luego clara</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🐟</div>
+            <div class="al-name">Pescado</div>
+            <div class="al-como">Merluza o lenguado al vapor, solo</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🦐</div>
+            <div class="al-name">Marisco</div>
+            <div class="al-como">Mejor después del año</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🥜</div>
+            <div class="al-name">Frutos secos</div>
+            <div class="al-como">En crema diluida, nunca enteros</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🥛</div>
+            <div class="al-name">Leche vaca</div>
+            <div class="al-como">Yogur natural sin azúcar desde 6m. Como bebida no hasta el año</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🫘</div>
+            <div class="al-name">Soja</div>
+            <div class="al-como">En pequeña cantidad</div>
+          </div>
+          <div class="alergeno-card">
+            <div class="al-emoji">🌿</div>
+            <div class="al-name">Sésamo</div>
+            <div class="al-como">En tahini o hummus diluido</div>
+          </div>
+        </div>
+        <div class="tip-box" style="margin-top:10px;margin-bottom:0"><strong>Evidencia actual:</strong> introduce los alérgenos <strong>antes de los 12 meses</strong>. Retrasarlos <strong>aumenta</strong> el riesgo de alergia, no lo reduce.</div>
+      </div>
+
+      <div class="sec-label">Reglas de oro</div>
+      <div class="tip-box"><strong>2 días</strong> entre alimentos de bajo riesgo — luego mezcla libremente con todo lo anterior.</div>
+      <div class="tip-box"><strong>3-5 días</strong> para los 8 alérgenos — siempre a mediodía, en casa, observar 12h.</div>
+      <div class="tip-box"><strong>Hierro + vit.C:</strong> carne/lentejas + pimiento o brócoli. Absorción x3.</div>
+      <div class="tip-box"><strong>AOVE</strong> en todos los purés, fuera del fuego siempre.</div>
+      <div class="tip-box"><strong>Biberón:</strong> espera 1h antes o después de comidas con hierro.</div>
+      <div class="sec-label">Nunca antes del año</div>
+      <div class="nunca-grid">
+        <div class="nunca-tag">❌ Miel</div>
+        <div class="nunca-tag">❌ Sal añadida</div>
+        <div class="nunca-tag">❌ Azúcar añadido</div>
+        <div class="nunca-tag">❌ Leche vaca como bebida principal</div>
+        <div class="nunca-tag">❌ Frutos secos enteros</div>
+        <div class="nunca-tag">❌ Atún rojo / Pez espada</div>
+        <div class="nunca-tag">❌ Cazón / Lucio</div>
+        <div class="nunca-tag">❌ Uvas enteras</div>
+        <div class="nunca-tag">❌ Espinacas / Acelgas</div>
+        <div class="nunca-tag">❌ Remolacha / Col</div>
+        <div class="nunca-tag">❌ Cereal en biberón (nunca — siempre en cuchara)</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🍼 Tomas orientativas del día</div>
+      <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:12px">Empezando primer biberón a las 8:30h · objetivo 1.000-1.200ml/día</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.2rem">☀️</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">08:30 — Desayuno</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.2rem">🍽️</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">13:00 — Comida</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.2rem">🍎</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">17:30 — Merienda</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">150-180ml — más pequeña para llegar con hambre a la cena</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.2rem">🌙</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">19:30 — Cena</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml — última toma antes de dormir</div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:#E8F0E0;border-radius:var(--radius-sm);border:1.5px solid #C5D9B0">
+          <div style="font-size:1.2rem">💤</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--green-dark)">21:30-22:00 — Dream feed</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">100-120ml — sin despertar, 2-2:30h después de dormirse</div>
+          </div>
+        </div>
+
+        <div style="font-size:0.7rem;color:var(--text-light);padding:8px 4px;border-top:1px solid var(--border);margin-top:4px">
+          💡 Espaciado ~4-5h entre tomas · Si toma poco en una, no adelantes la siguiente
+        </div>
+      </div>
+    </div>
+
+    <div id="nutri-diario" style="display:none">
+      <div class="card">
+        <div class="card-title">Fecha</div>
+        <input type="date" class="form-input" id="diario-fecha" style="width:100%">
+      </div>
+      <div class="card">
+        <div class="card-title">Registrar toma</div>
+        <div class="toma-tabs">
+          <button class="toma-tab active" data-toma="desayuno" onclick="selectToma(this)">☀️ Desayuno</button>
+          <button class="toma-tab" data-toma="comida" onclick="selectToma(this)">🍽️ Comida</button>
+          <button class="toma-tab" data-toma="merienda" onclick="selectToma(this)">🍎 Merienda</button>
+          <button class="toma-tab" data-toma="cena" onclick="selectToma(this)">🌙 Cena</button>
+        </div>
+
+        <!-- Tipo de toma -->
+        <div style="margin-top:10px; display:flex; gap:6px">
+          <button class="tipo-tab active" id="tipo-solido" onclick="selectTipo('solido', this)">🥣 Sólido</button>
+          <button class="tipo-tab" id="tipo-pecho" onclick="selectTipo('pecho', this)">🤱 Pecho</button>
+          <button class="tipo-tab" id="tipo-biberon" onclick="selectTipo('biberon', this)">🍼 Biberón</button>
+        </div>
+
+        <!-- Sólido -->
+        <div id="input-solido" style="margin-top:10px; display:flex; gap:8px">
+          <input type="text" class="form-input" id="diario-alimento" placeholder="Ej: puré de calabaza y pollo" style="flex:1">
+          <button class="btn-primary" onclick="agregarAlimento()">+</button>
+        </div>
+
+        <!-- Pecho -->
+        <div id="input-pecho" style="margin-top:10px; display:none">
+          <div style="display:flex; gap:8px; align-items:center">
+            <input type="time" class="form-input" id="diario-hora-pecho" style="width:100px">
+            <span style="font-size:0.82rem; color:var(--text-mid); flex:1">Toma de pecho</span>
+            <button class="btn-primary" onclick="agregarPecho()">+ Añadir</button>
+          </div>
+        </div>
+
+        <!-- Biberón -->
+        <div id="input-biberon" style="margin-top:10px; display:none">
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+            <input type="time" class="form-input" id="diario-hora-biberon" style="width:100px">
+            <input type="number" class="form-input" id="diario-ml" placeholder="ml" min="0" max="300" style="width:80px">
+            <span style="font-size:0.82rem; color:var(--text-mid)">ml</span>
+            <button class="btn-primary" onclick="agregarBiberon()">+</button>
+          </div>
+        </div>
+      </div>
+      <div id="diario-resumen"></div>
+    </div>
+
+    <!-- SEGURIDAD -->
+    <div id="nutri-seguridad" style="display:none">
+
+      <!-- BOTÓN 112 -->
+      <a href="tel:112" style="display:block; margin-bottom:12px; text-decoration:none">
+        <div style="background:#C4694F; border-radius:14px; padding:16px; text-align:center">
+          <div style="font-size:2rem; margin-bottom:4px">📞</div>
+          <div style="font-size:1.3rem; font-weight:700; color:#fff; letter-spacing:2px">LLAMAR AL 112</div>
+          <div style="font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:4px">Pulsa para llamar en caso de emergencia</div>
+        </div>
+      </a>
+
+      <!-- ATRAGANTAMIENTO -->
+      <div class="sec-label">Atragantamiento — menores de 1 año</div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">1</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">¿Tose o hace ruido?</div>
+            <div class="fase-head-sub">→ NO es atragantamiento real</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>No hagas nada.</strong> La tos es el mecanismo de defensa más efectivo. Déjale toser. No le golpees, no le pongas boca abajo, no interfieras.</div>
+          <div class="fase-dont">❌ Intervenir cuando tose puede empeorar la situación.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">2</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">No tose — silencio — cara azul</div>
+            <div class="fase-head-sub">→ Actúa inmediatamente</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">
+            <strong>5 palmadas en la espalda:</strong> boca abajo sobre tu antebrazo, cabeza más baja que el cuerpo, palmadas firmes entre los omóplatos con el talón de la mano.<br><br>
+            <strong>5 compresiones en el pecho:</strong> giras boca arriba, dos dedos en el centro del pecho por debajo de los pezones, comprimes fuerte y rápido.<br><br>
+            <strong>Alterna 5+5</strong> hasta que expulsa el objeto. Llama al 112 mientras actúas.
+          </div>
+          <div class="fase-dont">❌ No uses la maniobra de Heimlich abdominal en menores de 1 año — puede dañar órganos internos.</div>
+        </div>
+      </div>
+
+      <!-- GAG REFLEX -->
+      <div class="sec-label">Náusea de gag — no es atragantamiento</div>
+      <div class="tip-box">
+        <strong>Cara roja, arqueada, arcada, parece que va a vomitar</strong> — eso es el reflejo de gag. Es un mecanismo de protección normal. Los bebés lo tienen muy adelante en la lengua. Es desagradable de ver pero no es peligroso. <strong>No intervengas.</strong> Se pasa solo en segundos.
+      </div>
+      <div class="warn-box">El atragantamiento real es <strong>silencioso</strong>. Si hay ruido — tos, llanto, arcadas — el aire circula y no hay obstrucción real.</div>
+
+      <!-- ALERGIAS -->
+      <div class="sec-label">Reacción alérgica</div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">🟡</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Reacción leve</div>
+            <div class="fase-head-sub">Centro de salud — no es urgencia vital</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Urticaria (granitos rojos), rojez localizada, vómito aislado, ojos llorosos. <strong>Llama al centro de salud</strong> o ve a urgencias pediátricas. No es 112 pero sí atención médica ese mismo día.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🔴</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Anafilaxia — EMERGENCIA</div>
+            <div class="fase-head-sub">112 inmediatamente</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">
+            <strong>Señales:</strong> dificultad para respirar o respiración ruidosa · hinchazón de labios, lengua o garganta · palidez extrema o color azulado · pérdida de tono o consciencia · llanto muy agudo seguido de silencio.<br><br>
+            <strong>Llama al 112 inmediatamente</strong> mientras vigilas la respiración.
+          </div>
+          <div class="fase-dont">❌ Urticaria sola sin dificultad respiratoria NO es anafilaxia — no entres en pánico, ve al centro de salud.</div>
+        </div>
+      </div>
+
+      <div class="tip-box"><strong>Regla de oro para introducir alérgenos:</strong> siempre a mediodía, en casa, con el centro de salud abierto. Así tienes 12h de observación y recursos cerca si algo pasa.</div>
+
+      <!-- CURSO -->
+      <div class="warn-box" style="margin-top:4px">⚠️ <strong>Imprescindible:</strong> haz un curso de primeros auxilios pediátricos antes de empezar con sólidos. Cruz Roja Madrid los tiene cada semana — 3-4 horas presenciales. Leer no sustituye practicarlo con un muñeco.</div>
+
+    </div>
+  </div>
+</div>
+<div class="screen" id="screen-siestas">
+  <div style="margin-top:16px">
+
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSuenoTab('registro', this)">⏰ Siestas</button>
+      <button class="sub-tab" onclick="showSuenoTab('cuna', this)">🛏️ Dormir solo</button>
+    </div>
+
+    <!-- REGISTRO -->
+    <div id="sueno-registro">
+      <div class="ventana-info" id="ventana-vigilia">
+        ⏰ A los 4 meses aguanta despierto <strong>1h30-2h máximo</strong>. Usa esa ventana como guía.
+      </div>
+      <div class="card">
+        <div class="card-title">Registrar siesta</div>
+        <div class="siesta-form" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="siesta-fecha">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hora inicio</label>
+            <input type="time" class="form-input" id="siesta-inicio">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Hora fin</label>
+            <input type="time" class="form-input" id="siesta-fin">
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="agregarSiesta()">+ Añadir siesta</button>
+      </div>
+      <div class="card-title" style="margin-top:4px">Siestas de hoy</div>
+      <div class="siesta-log" id="siesta-log">
+        <div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Aún no has registrado siestas hoy</div>
+      </div>
+      <div class="total-siestas" id="totales-siestas" style="display:none">
+        <div class="total-card">
+          <div class="total-num" id="total-num">0</div>
+          <div class="total-label">siestas hoy</div>
+        </div>
+        <div class="total-card">
+          <div class="total-num" id="total-min">0h 0m</div>
+          <div class="total-label">sueño diurno</div>
+        </div>
+      </div>
+      <div class="sec-label">La siesta difícil</div>
+      <div class="warn-box">Entre las 15h y las 19h el cerebro resiste el sueño activamente. Si no cae en 20 minutos — adelanta el acostado nocturno a las 18-18h30.</div>
+      <div class="sec-label">Señales de cansancio</div>
+      <div class="card">
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">👁️ Ojos rojos o se los frota</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">😶 Mirada perdida o desenfocada</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">😤 Irritabilidad repentina</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">🥱 Bostezos</div></div></div>
+        <div class="alimento-item" style="border:none"><div class="alimento-info"><div class="alimento-nombre">👂 Se frota la cara o las orejas</div></div></div>
+      </div>
+
+      <div class="sec-label" style="margin-top:16px">🌙 Sueño nocturno</div>
+      <div class="card">
+        <div class="card-title">Registrar noche</div>
+        <div class="siesta-form" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="noche-fecha">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Se acostó</label>
+            <input type="time" class="form-input" id="noche-inicio">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Se despertó</label>
+            <input type="time" class="form-input" id="noche-fin">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:8px">
+          <label class="form-label">Despertares nocturnos</label>
+          <input type="number" class="form-input" id="noche-despertares" placeholder="0" min="0" max="20">
+        </div>
+        <div class="form-group" style="margin-top:8px">
+          <label class="form-label">Notas (opcional)</label>
+          <input type="text" class="form-input" id="noche-notas" placeholder="Ej: se despertó con gases">
+        </div>
+        <button class="btn-secondary" style="margin-top:8px" onclick="agregarNoche()">+ Añadir noche</button>
+      </div>
+      <div id="noches-log">
+        <div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Aún no has registrado ninguna noche</div>
+      </div>
+    </div>
+
+    <!-- DORMIR SOLO EN CUNA -->
+    <div id="sueno-cuna" style="display:none">
+
+      <div class="key-phrase" style="padding:12px 16px; margin-bottom:12px">
+        <p style="font-size:0.85rem"><span>La consistencia es el ingrediente activo.</span><br>El método es el vehículo.</p>
+      </div>
+
+      <div class="sec-label">Regla de oro — cuándo entrar</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem">
+          <div style="background:#E8F0E0;border-radius:8px;padding:10px 12px">
+            <div style="font-weight:700;color:var(--green-dark);margin-bottom:3px">✅ NO entras si...</div>
+            <div style="color:var(--text-mid)">Se queja suave · tiene pausas · el llanto sube y baja · lleva menos de 3 min</div>
+          </div>
+          <div style="background:#FFF3E0;border-radius:8px;padding:10px 12px">
+            <div style="font-weight:700;color:#E65100;margin-bottom:3px">⚠️ SÍ entras si...</div>
+            <div style="color:var(--text-mid)">Llanto que escala sin pausa durante 3-4 min seguidos · se pone rígido · ninguna bajada</div>
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-light);padding:4px 2px">💡 Cronómetro siempre antes de entrar — 3 min parecen eternos pero no lo son</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Si entras — el protocolo paso a paso</div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">1</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Mano en el pecho — si el llanto es medio</div>
+            <div class="fase-head-sub">Solo si no está ya en llanto fuerte</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Palma entera plana en el esternón — como el número 5. Firme, quieta, sin mover. Shhhh largo y continuo al volumen de su llanto. Cara cerca, sin mirarle a los ojos. 2-3 minutos.</div>
+          <div class="fase-dont">❌ Si ya está en llanto fuerte — sáltate este paso y ve directo al 2</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">2</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Vertical en brazos</div>
+            <div class="fase-head-sub">Cuando la mano no ha funcionado o llanto ya era fuerte</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Cógele directo a vertical — sin pasar por tumbado en la cuna. Quietos, sin mecer fuerte. Shhhh continuo. Espera a que el cuerpo se afloje aunque sea un poco. Mínimo 4 minutos antes de cambiar.</div>
+          <div class="fase-dont">❌ No cambies de estrategia antes de 3-4 min — el cambio le activa más</div>
+        </div>
+      </div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">3</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">De vuelta a la cuna</div>
+            <div class="fase-head-sub">Cuando esté tranquilo — no hace falta dormido</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Bájale de lado primero — cadera y hombro tocan el colchón al mismo tiempo. Manos debajo 30 segundos antes de soltar. Retira la mano del culo primero, luego la cabeza.</div>
+          <div class="fase-dont">❌ No esperes al knock-out — semidormido o tranquilo es suficiente</div>
+        </div>
+      </div>
+
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">4</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Si está boca abajo</div>
+            <div class="fase-head-sub">Con 5+ meses es postura segura</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">No le gires — mano firme en la espalda + shhhh. Si escala y hay que cogerle: directo a vertical sin pasar por tumbado boca arriba.</div>
+          <div class="fase-dont">❌ Girarle en la cuna le despierta del todo — evítalo</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Cronómetros de ayuda</div>
+      <div class="card">
+        <div style="font-size:0.72rem;color:var(--text-mid);margin-bottom:10px">Pulsa ▶ para arrancar · ⏸ para pausar · ↺ para reiniciar</div>
+        <div class="timer-row">
+          <div class="timer-label">
+            <div class="timer-title">😤 Quejido suave</div>
+            <div class="timer-sub">Espera antes de entrar</div>
+          </div>
+          <div class="timer-display" id="timer-display-0">3:00</div>
+          <button class="timer-reset" onclick="resetTimer(0, 180)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-0" onclick="toggleTimer(0, 180)">▶</button>
+        </div>
+        <div class="timer-row">
+          <div class="timer-label">
+            <div class="timer-title">😭 Mano en el pecho</div>
+            <div class="timer-sub">Aguanta así antes de cogerle</div>
+          </div>
+          <div class="timer-display" id="timer-display-1">3:00</div>
+          <button class="timer-reset" onclick="resetTimer(1, 180)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-1" onclick="toggleTimer(1, 180)">▶</button>
+        </div>
+        <div class="timer-row" style="border:none">
+          <div class="timer-label">
+            <div class="timer-title">🤱 Vertical en brazos</div>
+            <div class="timer-sub">Mínimo antes de cambiar</div>
+          </div>
+          <div class="timer-display" id="timer-display-2">4:00</div>
+          <button class="timer-reset" onclick="resetTimer(2, 240)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-2" onclick="toggleTimer(2, 240)">▶</button>
+        </div>
+      </div>
+
+      <div class="sec-label">Cómo distinguir qué le pasa</div>
+      <div class="card">
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.78rem">
+          <div><strong>🦷 Dental:</strong> se lleva todo a la boca, escala rápido, no se calma con pecho, vuelve a despertar a los 10 min → apiretal 1,2ml</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px"><strong>💨 Gas:</strong> arqueo de espalda, mueve el culo hacia arriba, lleva rato sin cagar → porteo vertical, círculos en barriga</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px"><strong>🔄 Ciclo de sueño:</strong> quejido que sube y baja, pausas, se lleva la mano a la boca → no entrar, dejar que lo resuelva</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px"><strong>🍼 Hambre real:</strong> succiona fuerte desde el primer sorbo, toma más de 100ml, se calma rápido → biberón</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Lo que nunca funciona</div>
+      <div class="warn-box">
+        ❌ Mover la cuna cuando llora — crea otra asociación<br>
+        ❌ Entrar en cada ruidito — no le das tiempo<br>
+        ❌ Mirarle a los ojos al calmarle — activa<br>
+        ❌ Ceder a mitad de proceso — la siguiente noche es peor<br>
+        ❌ Hablarle para calmarle en la cuna
+      </div>
+
+      <div class="tip-box" style="margin-top:8px"><strong>La frase del pasillo:</strong> "Estoy dejando que aprenda, no estoy abandonando."</div>
+
+    </div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">1</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">19:00 — Baño o ritual</div>
+            <div class="fase-head-sub">Luz tenue desde ya. Siempre lo mismo.</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">No hace falta baño diario. El ritual sí es diario — el cerebro aprende que esa secuencia significa dormir.</div>
+        </div>
+      </div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">2</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">19:10 — Pecho en habitación</div>
+            <div class="fase-head-sub">Luz apagada. Ruido blanco encendido.</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Cuando la succión se vuelva <strong>lenta, espaciada y sin tragar</strong> — retiras. Ese es el momento. Puedes usar el dedo meñique como puente.</div>
+          <div class="fase-dont">❌ No esperes al knock-out total. El objetivo es meterle somnoliento, no dormido.</div>
+        </div>
+      </div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">3</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">19:20 — Saco + shhhh</div>
+            <div class="fase-head-sub">Siempre igual, siempre en ese orden.</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Pon el monitor con el shhhh encendido. Tú también puedes hacer shhhh suave mientras le pones el saco — refuerza la señal. Mano en su pecho llevando un ritmo tranquilo.</div>
+          <div class="fase-dont">❌ Sin contacto visual — la mirada directa activa. Cara cerca, mirada desviada.</div>
+        </div>
+      </div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">4</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">19:25 — A la cuna</div>
+            <div class="fase-head-sub">La técnica importa.</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Bájale <strong>de lado primero</strong> — cadera y hombro tocan el colchón al mismo tiempo. Manos debajo 30 segundos antes de soltar. Retira mano del culo primero, luego la cabeza.</div>
+          <div class="fase-dont">❌ No le bajes directamente de espaldas — activa el reflejo de Moro y se despierta.</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Cronómetros de ayuda</div>
+      <div class="card">
+        <div style="font-size:0.72rem;color:var(--text-mid);margin-bottom:10px">Pulsa ▶ para arrancar · ⏸ para pausar · ↺ para reiniciar</div>
+
+        <div class="timer-row">
+          <div class="timer-label">
+            <div class="timer-title">😤 Quejido suave</div>
+            <div class="timer-sub">Espera antes de entrar</div>
+          </div>
+          <div class="timer-display" id="timer-display-0">3:00</div>
+          <button class="timer-reset" onclick="resetTimer(0, 180)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-0" onclick="toggleTimer(0, 180)">▶</button>
+        </div>
+
+        <div class="timer-row">
+          <div class="timer-label">
+            <div class="timer-title">😭 Mano en el pecho</div>
+            <div class="timer-sub">Aguanta así antes de cogerle</div>
+          </div>
+          <div class="timer-display" id="timer-display-1">3:00</div>
+          <button class="timer-reset" onclick="resetTimer(1, 180)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-1" onclick="toggleTimer(1, 180)">▶</button>
+        </div>
+
+        <div class="timer-row" style="border:none">
+          <div class="timer-label">
+            <div class="timer-title">🤱 Vertical en brazos</div>
+            <div class="timer-sub">Mínimo antes de cambiar</div>
+          </div>
+          <div class="timer-display" id="timer-display-2">4:00</div>
+          <button class="timer-reset" onclick="resetTimer(2, 240)" title="Reiniciar">↺</button>
+          <button class="timer-btn" id="timer-btn-2" onclick="toggleTimer(2, 240)">▶</button>
+        </div>
+      </div>
+
+      <div class="sec-label">Si llora al dejarlo</div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">A</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Quejido suave</div>
+            <div class="fase-head-sub">No escala</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>No entres.</strong> Espera 3 minutos mirando el reloj. Muchos se apagan solos. Si baja — no entras. Has ganado.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">B</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Llanto que sube</div>
+            <div class="fase-head-sub">Escala en 3 minutos</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Entras. <strong>No le coges todavía.</strong> Mano firme y plana en el esternón. Shhhh continuo. Cara cerca sin mirarle. 3 minutos. Si se calma — sales.</div>
+          <div class="fase-dont">❌ Sin hablarle. La voz despierta más que calma.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">C</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">No se calma con la mano</div>
+            <div class="fase-head-sub">3 minutos y sigue</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Le coges vertical en tu hombro. Balanceo suave. Shhhh. <strong>4 minutos mínimos</strong> antes de cambiar nada. Cuando esté tranquilo pero no dormido — cuna otra vez.</div>
+          <div class="fase-dont">❌ No cambies de estrategia antes de 3-4 minutos. El cambio le altera más.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">D</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Noche chunga — nada funciona</div>
+            <div class="fase-head-sub">Llevas 30 minutos</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Das pecho. Sin culpa. Sin drama.</strong> Le metes dormido y esa noche ya está. Mañana se retoma exactamente igual.</div>
+          <div class="fase-dont">Una noche mala no borra lo avanzado. La consistencia a largo plazo es lo que importa.</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Lo que nunca funciona</div>
+      <div class="warn-box">
+        ❌ Mover la cuna cuando llora — crea otra asociación<br>
+        ❌ Entrar cada vez que hace un ruidito — no le das tiempo<br>
+        ❌ Mirarle a los ojos al calmarle — activa<br>
+        ❌ Cambiar el protocolo según cómo te sientas ese día<br>
+        ❌ Hablarle para calmarle en la cuna
+      </div>
+
+      <div class="tip-box" style="margin-top:8px"><strong>La frase del pasillo:</strong> "Estoy dejando que aprenda, no estoy abandonando."</div>
+
+      <div class="sec-label">Cuándo notar progresión</div>
+      <div class="card">
+        <div class="alimento-item">
+          <div class="alimento-info">
+            <div class="alimento-nombre">📅 Semana 1</div>
+            <div class="alimento-como">Experimentas, vas pillando la ventana de somnolencia. Habrá noches de escenario D. Normal.</div>
+          </div>
+        </div>
+        <div class="alimento-item">
+          <div class="alimento-info">
+            <div class="alimento-nombre">📅 Semana 2</div>
+            <div class="alimento-como">El proceso baja de 30-40 minutos a 10-15. Alguna noche entra solo. La nana ya le pone somnoliento.</div>
+          </div>
+        </div>
+        <div class="alimento-item" style="border:none">
+          <div class="alimento-info">
+            <div class="alimento-nombre">📅 Semana 3</div>
+            <div class="alimento-como">La mayoría de noches funciona. Habrá días malos — enfermedad, salto, sobreestimulación. Esas noches das pecho y punto.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUEÑO NOCTURNO -->
+    <div id="sueno-nocturno" style="display:none">
+      <div class="key-phrase" style="padding:12px 16px; margin-bottom:12px">
+        <p style="font-size:0.85rem">El sueño nocturno se construye<br><span>durante el día.</span></p>
+      </div>
+      <div class="sec-label">Registro sueño nocturno</div>
+      <div class="card">
+        <div class="card-title">Añadir noche</div>
+        <div class="siesta-form" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="noche-fecha">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Se acostó</label>
+            <input type="time" class="form-input" id="noche-inicio">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Se despertó</label>
+            <input type="time" class="form-input" id="noche-fin">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:8px">
+          <label class="form-label">Despertares nocturnos</label>
+          <input type="number" class="form-input" id="noche-despertares" placeholder="0" min="0" max="20">
+        </div>
+        <div class="form-group" style="margin-top:8px">
+          <label class="form-label">Notas (opcional)</label>
+          <input type="text" class="form-input" id="noche-notas" placeholder="Ej: se despertó con gases">
+        </div>
+        <button class="btn-secondary" style="margin-top:8px" onclick="agregarNoche()">+ Añadir noche</button>
+      </div>
+      <div class="card-title" style="margin-top:4px">Últimas noches</div>
+      <div id="noches-log">
+        <div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Aún no has registrado ninguna noche</div>
+      </div>
+      <div class="sec-label">Guía por etapas</div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">0-3m</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Sin expectativas de noche seguida</div>
+            <div class="fase-head-sub">El ritmo circadiano no está formado</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Despertares cada 2-3h son normales. La prioridad es alimentación, no sueño. Si hace un tramo de 4-5h es un regalo, no la norma.</div>
+        </div>
+      </div>
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">3-6m</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Empieza a organizarse</div>
+            <div class="fase-head-sub">Tramos más largos posibles</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Tramos de 5-6h son alcanzables con rutina. Regresión de los 4 meses puede interrumpir temporalmente — es normal.</div>
+          <div class="fase-dont">⚠️ Regresión 4 meses: semanas 15-20. No es retroceso permanente.</div>
+        </div>
+      </div>
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">6-9m</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Noche más larga posible</div>
+            <div class="fase-head-sub">Con rutina consolidada</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do">Muchos bebés hacen 8-10h seguidas. Ansiedad de separación a los 8-9m puede causar más despertares — es etapa, no hábito.</div>
+        </div>
+      </div>
+      <div class="sec-label">Lo que más afecta al sueño nocturno</div>
+      <div class="tip-box"><strong>Las siestas de día:</strong> ni pocas ni muchas. Sin siestas el bebé duerme peor de noche, no mejor.</div>
+      <div class="tip-box"><strong>La última siesta:</strong> que acabe 1h30-2h antes del acostado. Si acaba tarde, no tiene suficiente presión de sueño.</div>
+      <div class="tip-box"><strong>La rutina:</strong> siempre igual, siempre en el mismo orden. El cerebro necesita la secuencia para bajar el cortisol.</div>
+      <div class="tip-box"><strong>La oscuridad total:</strong> imprescindible. Cualquier luz interrumpe la melatonina.</div>
+      <div class="warn-box">⚠️ Las noches malas puntuales no destruyen lo construido. Se retoma al día siguiente.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── RABIETAS ── -->
+<div class="screen" id="screen-rabietas">
+  <div style="margin-top:16px">
+
+    <div class="key-phrase">
+      <p><span>El límite no cambia.</span><br>La emoción sí se acoge.</p>
+    </div>
+
+    <div class="warn-box" style="font-size:0.78rem">⚠️ Las rabietas reales empiezan hacia los 15-18 meses. Lo que haces ahora construye la base neurológica para gestionarlas bien cuando lleguen.</div>
+
+    <div class="sub-tabs" style="margin-top:12px">
+      <button class="sub-tab active" onclick="showRabietaTab('fases', this)">🌊 Fases</button>
+      <button class="sub-tab" onclick="showRabietaTab('situaciones', this)">🎯 Situaciones</button>
+      <button class="sub-tab" onclick="showRabietaTab('hacks', this)">🛠️ Hacks</button>
+    </div>
+
+    <!-- FASES -->
+    <div id="rabieta-fases">
+      <div class="sec-label">Las 3 fases</div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">1</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">La escalada</div>
+            <div class="fase-head-sub">Todavía puedes intervenir</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Haz esto:</strong> Nombra la emoción ANTES del límite. <em>"Veo que estás muy enfadado porque quieres seguir jugando."</em> Solo eso ya baja la intensidad.</div>
+          <div class="fase-dont">❌ No pongas el límite todavía — primero conexión, luego corrección.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">2</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">El pico</div>
+            <div class="fase-head-sub">Solo contener. No intervenir.</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Haz esto:</strong> Presencia tranquila. <em>"Estoy aquí."</em> Si puede hacerse daño, sujetas con calma y sin drama. El límite no se mueve.</div>
+          <div class="fase-dont">❌ No razonas, no explicas, no negocias. Si tú subes, él sube más.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f3">
+        <div class="fase-head">
+          <div class="fase-num">3</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">La bajada</div>
+            <div class="fase-head-sub">Reconectar y aprender</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Haz esto:</strong> Abrazo sin palabras primero. Cuando esté calmado del todo — conversación corta de 3 pasos.</div>
+          <div class="fase-dont">❌ No hables si sigue llorando. Primero cuerpo, luego palabras.</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Los 3 pasos post-rabieta</div>
+      <div class="tip-box"><strong>1. Nombra:</strong> "Te enfadaste mucho cuando apagué la tele."</div>
+      <div class="tip-box"><strong>2. Valida sin validar la conducta:</strong> "Es normal estar enfadado. Y no se tiran cosas."</div>
+      <div class="tip-box"><strong>3. Busca solución juntos:</strong> "¿Qué podemos hacer la próxima vez que te enfades mucho?"</div>
+    </div>
+
+    <!-- SITUACIONES REALES -->
+    <div id="rabieta-situaciones" style="display:none">
+      <div class="sec-label">Situaciones reales — qué decir exactamente</div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🛒</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Rabieta en el supermercado</div>
+            <div class="fase-head-sub">Quiere algo y no se lo das</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Di esto:</strong> "Veo que quieres esas galletas. Hoy no las compramos." Repite lo mismo sin elevar el tono si escala. Baja tu voz a susurro — el cerebro tiene que hacer esfuerzo para escucharte y eso interrumpe el circuito.</div>
+          <div class="fase-dont">❌ No digas "si te portas bien te compro otra cosa" — estás negociando con la rabieta. ❌ No expliques por qué no — en el pico no procesa lógica.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">📺</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">No quiere apagar la pantalla</div>
+            <div class="fase-head-sub">Aviso previo ignorado</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Prevención:</strong> "En 5 minutos apagamos." — avisa siempre. Cuando llega el momento: "Han pasado los 5 minutos. Apagamos." Y apagas. Sin drama, sin negociar.<br><strong>Si explota:</strong> "Entiendo que te da rabia. Y apagamos igual."</div>
+          <div class="fase-dont">❌ No des 5 minutos más. Una vez que cedes, aprende que la rabieta funciona.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🍽️</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">No quiere comer lo que hay</div>
+            <div class="fase-head-sub">Tira el plato o lo rechaza</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Di esto:</strong> "Esto es lo que hay hoy." Si tira el plato: "Los platos no se tiran. Si tiras el plato, recogemos y se acabó la comida." Y cumples.<br><strong>Truco:</strong> dos opciones dentro de lo que ya has decidido — "¿Quieres el puré con cuchara o con tenedor?" La elección es suya, lo que come no.</div>
+          <div class="fase-dont">❌ No prepares otra cosa. ❌ No conviertas la comida en negociación — es el tema donde más trampa hay.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">👊</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Pega, muerde o arañe</div>
+            <div class="fase-head-sub">Agresión física</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Di esto inmediatamente:</strong> "No se pega." Punto. Sin drama, sin discurso. Saca al niño de la situación con calma física — le coges y le apartas. No es castigo, es interrupción.<br><strong>Después:</strong> "Cuando te enfadas puedes decirme que estás enfadado. No puedes pegar."</div>
+          <div class="fase-dont">❌ No pegues de vuelta "para que sepa cómo duele" — aprende que pegar es la respuesta al enfado. ❌ No ignores si hay otro niño implicado.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🛏️</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">No quiere irse a dormir</div>
+            <div class="fase-head-sub">Resistencia al ritual</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Prevención:</strong> la rutina siempre igual adelanta la resistencia — el cerebro ya sabe lo que viene y lo acepta antes.<br><strong>Si resiste:</strong> "Es la hora de dormir." Sin negociar. El ritual es el límite — baño, pecho/bibe, nana, cuna. Siempre igual, siempre firme.</div>
+          <div class="fase-dont">❌ No te quedes hasta que esté dormido si el objetivo es que aprenda a dormirse solo. ❌ No introduzcas pantalla para calmarle — crea dependencia nueva.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🍗</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">"No quiero pollo" — rechazo de comida</div>
+            <div class="fase-head-sub">Con o sin gente delante</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Di esto:</strong> "Hoy hay pollo. Si no quieres, no comes." Una vez, tono neutro, sin enfado.<br><br>Si no come — se levanta con hambre. Sin snack después, sin alternativa. La próxima comida es la próxima comida.<br><br><strong>Delante de gente:</strong> exactamente igual. Que los demás vean que no te mueves es parte del aprendizaje.</div>
+          <div class="fase-dont">❌ Nunca hagas una comida alternativa aunque sea una vez — eso crea al niño que grita "hazme un huevo frito" en casa ajena. Un niño sano no se deja pasar hambre — cuando aprende que no hay alternativa, come. Funciona en 3-4 días si eres consistente.</div>
+        </div>
+      </div>
+
+      <div class="fase-card f2">
+        <div class="fase-head">
+          <div class="fase-num">🏠</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Rabieta delante de amigos en casa</div>
+            <div class="fase-head-sub">La presión social es tuya, no suya</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Protocolo igual que siempre.</strong> Bajas la voz, te acercas a su altura, límite claro una vez. Si escala — le sacas de la situación con calma, pasillo o habitación, que se regule fuera. Volvéis cuando esté calmado.</div>
+          <div class="fase-dont">❌ No cedas por vergüenza — ceder delante de gente es el peor momento para ceder. Aprende que la audiencia multiplica el poder de la rabieta y las rabietas en público se vuelven su herramienta favorita.<br><br>Los adultos sin hijos piensan que eres mala madre. Los adultos con hijos piensan "ojalá lo hubiera hecho así."</div>
+        </div>
+      </div>
+
+      <div class="fase-card f1">
+        <div class="fase-head">
+          <div class="fase-num">😭</div>
+          <div class="fase-head-text">
+            <div class="fase-head-title">Cuando tú estás al límite</div>
+            <div class="fase-head-sub">Y sientes que vas a explotar</div>
+          </div>
+        </div>
+        <div class="fase-body">
+          <div class="fase-do"><strong>Sal de la habitación 2 minutos.</strong> Si el niño está seguro, ponle en un sitio seguro y date espacio. Un padre regulado calma mejor que uno tenso. No es rendirse — es regularte para poder regularle a él.</div>
+          <div class="fase-dont">Un padre que grita refuerza la escalada. Tu tono de voz es la herramienta más potente que tienes.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HACKS -->
+    <div id="rabieta-hacks" style="display:none">
+      <div class="sec-label">Hacks que funcionan de verdad</div>
+      <div class="hack-grid">
+        <div class="hack-card">
+          <span class="hack-emoji">📦</span>
+          <div class="hack-name">Caja de la rabia</div>
+          <div class="hack-desc">Caja de cartón donde puede golpear o gritar dentro. Canal físico para la emoción. Desde 2 años.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🌿</span>
+          <div class="hack-name">Rincón de la calma</div>
+          <div class="hack-desc">Espacio con peluche y libro. Él elige ir, no se le manda. Nunca es castigo.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🕯️</span>
+          <div class="hack-name">Soplar velas</div>
+          <div class="hack-desc">En escalada: "soplamos juntos" una vela imaginaria. Activa respiración diafragmática sin que parezca técnica.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🤫</span>
+          <div class="hack-name">El susurro</div>
+          <div class="hack-desc">En público baja tu voz a susurro. El cerebro tiene que esforzarse para escucharte — interrumpe el ciclo.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">⏰</span>
+          <div class="hack-name">Aviso 5 min</div>
+          <div class="hack-desc">Avisa siempre antes de cambiar de actividad. El cerebro infantil odia la sorpresa. Las protestas bajan 70%.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🎭</span>
+          <div class="hack-name">Hacerse la loca</div>
+          <div class="hack-desc">Si busca tu reacción: date la vuelta, cara ridícula para ti sola, vuelve seria. Rompe el juego de poder.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🔀</span>
+          <div class="hack-name">La trampa de elección</div>
+          <div class="hack-desc">"¿El jersey azul o el verde?" Dos opciones que tú ya aprobaste. Él siente autonomía, tú mantienes control.</div>
+        </div>
+        <div class="hack-card">
+          <span class="hack-emoji">🚦</span>
+          <div class="hack-name">Semáforo</div>
+          <div class="hack-desc">Verde=tranquilo, amarillo=algo molesta, rojo=necesito ayuda. Vocabulario emocional desde 2-3 años.</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Lo que NUNCA funciona</div>
+      <div class="warn-box">
+        ❌ <strong>Ceder al límite</strong> aunque sea una vez — enseña que la rabieta funciona. Es la peor decisión a largo plazo.<br><br>
+        ❌ <strong>Elevar la voz</strong> — pierdes autoridad y le das la atención intensa que a veces busca.<br><br>
+        ❌ <strong>Razonar en el pico</strong> — el córtex prefrontal está desconectado. No procesa lógica. Espera a que se calme.<br><br>
+        ❌ <strong>Amenazas vacías</strong> — "como no pares nos vamos" y luego no te vas. Aprende que las amenazas son ruido.<br><br>
+        ❌ <strong>Reírte</strong> — aunque sea ridículo, le humilla y escala.<br><br>
+        ❌ <strong>Mandarle solo a su cuarto</strong> — aprende que las emociones se esconden, no se gestionan.
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="screen" id="screen-avion">
+  <div style="margin-top:16px">
+
+    <div class="key-phrase" style="padding:12px 16px; margin-bottom:12px">
+      <p style="font-size:0.88rem">El avión no es el problema.<br><span>La falta de plan sí lo es.</span></p>
+    </div>
+
+    <div class="sub-tabs" id="avion-age-tabs">
+      <button class="sub-tab active" onclick="showAvionTab('0-6', this)">0-6m</button>
+      <button class="sub-tab" onclick="showAvionTab('6-12', this)">6-12m</button>
+      <button class="sub-tab" onclick="showAvionTab('12-24', this)">1-2 años</button>
+      <button class="sub-tab" onclick="showAvionTab('2-4', this)">2-4 años</button>
+    </div>
+
+    <!-- 0-6 meses -->
+    <div id="avion-0-6">
+      <div class="card" style="margin-bottom:10px">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">✈️ Checklist 0-6 meses</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;color:var(--text)">
+          <div>😴 <strong>Siesta acaba mínimo 1h30 antes del embarque</strong></div>
+          <div>✅ 1h30-2h30 vigilia al embarcar = ventana perfecta</div>
+          <div>⚠️ &lt;1h30 = intenta porteo con más paciencia</div>
+          <div>❌ &gt;2h30 = sobrecanso, acompaña el llanto vertical</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">👂 <strong>Oídos — empieza 20min antes del descenso</strong></div>
+          <div>🤱 Pecho &gt; biberón &gt; chupete en efectividad</div>
+          <div>Si se suelta: otro pecho → chupete → dedo en mejilla interior</div>
+          <div>Si está dormido al despegue: no despertar</div>
+          <div>Si está dormido al aterrizar: despertar 20min antes + pecho</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🤱 <strong>Para dormirle</strong></div>
+          <div>Porteo de pie en el pasillo + mantita tapando campo visual</div>
+          <div>Empieza con primeras señales de cansancio, no cuando ya llora</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🎒 <strong>Bolso de mano</strong></div>
+          <div>Pañales x2 por hora de vuelo · toallitas · muda x2 · saco · fórmula en sobres</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6-12 meses -->
+    <div id="avion-6-12" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">✈️ Checklist 6-12 meses</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;color:var(--text)">
+          <div>⚠️ <strong>Etapa más difícil — se mueve, quiere explorar, no entiende</strong></div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">⏰ <strong>Elige vuelo que coincida con siesta o sueño nocturno</strong></div>
+          <div>👂 Oídos igual que 0-6m — succión en despegue y 20min antes del descenso</div>
+          <div>🤱 Porteo sigue funcionando si está cansado</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🎁 <strong>Entretenimiento</strong></div>
+          <div>Juguetes envueltos en papel — desarrollarlos ya es el juego</div>
+          <div>Rollo de papel de cocina vacío · bolsa con objetos para meter y sacar</div>
+          <div>Ventanilla · canciones con gestos · paseo por el pasillo</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🎒 <strong>Bolso de mano</strong></div>
+          <div>Todo lo de 0-6m + snacks blandos · mordedor frío · libro de tela</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12-24 meses -->
+    <div id="avion-12-24" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">✈️ Checklist 1-2 años</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;color:var(--text)">
+          <div>⏰ <strong>Vuelo que coincida con siesta o sueño nocturno</strong></div>
+          <div>👂 Oídos — bebida con pajita o snack en despegue y descenso</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🎁 <strong>Entretenimiento</strong></div>
+          <div>Bolsa sorpresa — 1 objeto nuevo cada 15-20min</div>
+          <div>Pinturas de cera gruesas + papel · libros de pegatinas reposicionables</div>
+          <div>Pompas de jabón en el baño del avión · snacks nuevos</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">😴 <strong>Si está cansado y escala</strong></div>
+          <div>Mantita + oscuridad + porteo si cabe — el sueño resuelve lo que no resuelve nada</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2-4 años -->
+    <div id="avion-2-4" style="display:none">
+      <div class="card" style="margin-bottom:10px">
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">✈️ Checklist 2-4 años</div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;color:var(--text)">
+          <div>🗣️ <strong>Cuéntale qué va a pasar antes de salir de casa</strong></div>
+          <div>🎒 Deja que él elija 3-4 cosas para su mochila</div>
+          <div>👂 Oídos — bebida con pajita o caramelo duro en despegue y descenso</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🎁 <strong>Entretenimiento</strong></div>
+          <div>Audiolibros con auriculares · juegos de mesa mini · cuaderno + pinturas</div>
+          <div>Veo veo · fotos con el móvil en modo avión · pegatinas de escenas</div>
+          <div style="border-top:1px solid var(--border);padding-top:8px">🌊 <strong>Si viene la rabieta</strong></div>
+          <div>"Entiendo que estás cansado. Y nos quedamos en el asiento." — una vez, con calma</div>
+          <div>Mismo protocolo que en tierra — el avión no cambia las reglas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Siempre útil -->
+    <div class="card" style="margin-top:4px">
+      <div style="font-size:0.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px">📋 Todas las edades</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.8rem;color:var(--text)">
+        <div>🧳 Factura el máximo — menos bultos en cabina = más manos libres</div>
+        <div>⏰ Llega 30min antes de lo necesario — las prisas son el enemigo</div>
+        <div>🌙 Lleva el saco de dormir — el olor y el ritual importan más que el lugar</div>
+        <div>🧘 Tú regulada primero — tu tensión se transmite</div>
+        <div>😤 Ignora las miradas — nadie recuerda al bebé que lloró. Tú sí recuerdas que lo gestionaste</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" onclick="showScreen('inicio', this)">
+    <span class="nav-icon">🌱</span>
+    <span class="nav-label">Inicio</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('nutricion', this)">
+    <span class="nav-icon">🥣</span>
+    <span class="nav-label">Nutrición</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('siestas', this)">
+    <span class="nav-icon">😴</span>
+    <span class="nav-label">Sueño</span>
+  </button>
+  <button class="nav-btn terra" onclick="showScreen('rabietas', this)">
+    <span class="nav-icon">🌊</span>
+    <span class="nav-label">Rabietas</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('avion', this)">
+    <span class="nav-icon">✈️</span>
+    <span class="nav-label">Avión</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('tips', this)">
+    <span class="nav-icon">💡</span>
+    <span class="nav-label">Tips</span>
+  </button>
+  <button class="nav-btn" onclick="showScreen('seguimiento', this)">
+    <span class="nav-icon">📈</span>
+    <span class="nav-label">Seguimiento</span>
+  </button>
+</nav>
+
+<!-- ── TIPS ── -->
+<div class="screen" id="screen-tips">
+  <div style="margin-top:16px">
+
+    <div class="key-phrase" style="padding:12px 16px; margin-bottom:12px">
+      <p style="font-size:0.85rem">Guía para Miguel<br><span>y quien le toque cuidar a Mauro</span></p>
+    </div>
+
+    <div class="sec-label">🍼 Tomas — respetar los espacios</div>
+    <div class="card">
+      <div style="font-size:0.75rem;color:var(--text-mid);margin-bottom:12px">Que llegue con hambre real a cada toma. No adelantes si llora — primero distrae.</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.1rem">☀️</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">08:30 — Desayuno</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.1rem">🍽️</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">13:00 — Comida</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.1rem">🍎</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">17:30 — Merienda</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">150-180ml — más pequeña para que llegue con hambre a la cena</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:var(--cream);border-radius:var(--radius-sm);border:1.5px solid var(--border)">
+          <div style="font-size:1.1rem">🌙</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--text)">19:30 — Cena</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">200-240ml — última toma antes de dormir</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:#E8F0E0;border-radius:var(--radius-sm);border:1.5px solid #C5D9B0">
+          <div style="font-size:1.1rem">💤</div>
+          <div style="flex:1">
+            <div style="font-size:0.78rem;font-weight:700;color:var(--green-dark)">21:30-22:00 — Dream feed</div>
+            <div style="font-size:0.73rem;color:var(--text-mid)">100-120ml sin despertar — 2-2:30h después de dormirse</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">🛁 Ritual de sueño — a partir de las 19:00h</div>
+
+    <div class="fase-card f3">
+      <div class="fase-head">
+        <div class="fase-num">1</div>
+        <div class="fase-head-text">
+          <div class="fase-head-title">Baño o esponja</div>
+          <div class="fase-head-sub">Agua templada — nunca muy caliente</div>
+        </div>
+      </div>
+      <div class="fase-body">
+        <div class="fase-do">Prueba la temperatura en tu muñeca — tiene que sentirse templada, no caliente. El baño es la señal más potente de que llega la noche.</div>
+      </div>
+    </div>
+
+    <div class="fase-card f3">
+      <div class="fase-head">
+        <div class="fase-num">2</div>
+        <div class="fase-head-text">
+          <div class="fase-head-title">Secar muy bien</div>
+          <div class="fase-head-sub">Especialmente pliegues y papada</div>
+        </div>
+      </div>
+      <div class="fase-body">
+        <div class="fase-do">Secar bien debajo de la papada, axilas, pliegues del cuello y detrás de las orejas. La humedad en esas zonas irrita la piel.</div>
+      </div>
+    </div>
+
+    <div class="fase-card f1">
+      <div class="fase-head">
+        <div class="fase-num">3</div>
+        <div class="fase-head-text">
+          <div class="fase-head-title">Crema cara y pliegues</div>
+          <div class="fase-head-sub">Cicaplast o similar</div>
+        </div>
+      </div>
+      <div class="fase-body">
+        <div class="fase-do">Cicaplast en cara, papada y pliegues donde la piel se irrita. Una capa fina es suficiente.</div>
+      </div>
+    </div>
+
+    <div class="fase-card f1">
+      <div class="fase-head">
+        <div class="fase-num">4</div>
+        <div class="fase-head-text">
+          <div class="fase-head-title">Masaje corporal</div>
+          <div class="fase-head-sub">Crema Weleda bebé</div>
+        </div>
+      </div>
+      <div class="fase-body">
+        <div class="fase-do">Masajito suave con la crema Weleda en el resto del cuerpo — brazos, piernas, barriga. El masaje relaja y refuerza la señal de que llega el sueño.</div>
+      </div>
+    </div>
+
+    <div class="sec-label">🌙 Si se despierta por la noche</div>
+    <div class="card">
+      <div style="background:#E8F0E0;border-radius:8px;padding:12px;margin-bottom:10px">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--green-dark);margin-bottom:6px">✅ Aguanta del dream feed hasta las 8am sin comer</div>
+        <div style="font-size:0.75rem;color:var(--text-mid);line-height:1.5">Si se despierta antes de las 6am — lo más probable es que <strong>NO sea hambre</strong>. Es ciclo de sueño interrumpido.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.78rem;color:var(--text)">
+        <div>⏱️ Espera 3 minutos antes de entrar — puede resolverlo solo</div>
+        <div>🤫 Si entras: mano en el pecho firme + shhhh largo y fuerte</div>
+        <div>🤱 Si escala: vertical quieto hasta que se calme, luego cuna</div>
+        <div>🍼 Biberón solo si son más de las 6am o lleva más de 8h desde el dream feed</div>
+      </div>
+    </div>
+
+    <div class="sec-label">🛏️ Seguridad en la cuna</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#FFF3F3;border-radius:8px;padding:10px 12px;border:1.5px solid #FFCDD2">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--terra);margin-bottom:4px">❌ Nada suelto en la cuna</div>
+          <div style="font-size:0.73rem;color:var(--text-mid);line-height:1.5">Sin mantas, sin muselinas, sin peluches, sin almohada. Cualquier tela suelta puede taparle la cara. Cuna vacía = cuna segura.</div>
+        </div>
+        <div style="background:var(--cream);border-radius:8px;padding:10px 12px;border:1.5px solid var(--border)">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:4px">👕 Body MUY fino debajo del saco</div>
+          <div style="font-size:0.73rem;color:var(--text-mid);line-height:1.5">Body de verano de manga corta — no de manga larga ni más grueso. Si va muy abrigado se despertará antes por el calor aunque la habitación esté a buena temperatura.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec-label">😴 Última siesta del día</div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.78rem">
+        <div style="background:#E8F0E0;border-radius:8px;padding:10px 12px">
+          <div style="font-weight:700;color:var(--green-dark);margin-bottom:3px">✅ Ideal — acaba antes de las 17:45</div>
+          <div style="color:var(--text-mid)">Llega con el cansancio justo para el ritual de las 19:30-20:00</div>
+        </div>
+        <div style="background:#FFF3E0;border-radius:8px;padding:10px 12px">
+          <div style="font-weight:700;color:#E65100;margin-bottom:3px">⚠️ Si se duerme después de las 18:00</div>
+          <div style="color:var(--text-mid)">Máximo 20 minutos y le despiertas tú. Si duerme más no llegará con sueño al ritual y la noche se complica.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SEGUIMIENTO ── -->
+<div class="screen" id="screen-seguimiento">
+  <div style="margin-top:16px">
+
+    <div class="sub-tabs" id="seg-tabs">
+      <button class="sub-tab active" onclick="showSegTab('crecimiento', this)">📈 Crecimiento</button>
+      <button class="sub-tab" onclick="showSegTab('vacunas', this)">💉 Vacunas</button>
+      <button class="sub-tab" onclick="showSegTab('dientes', this)">🦷 Dentición</button>
+    </div>
+
+    <!-- CRECIMIENTO -->
+    <div id="seg-crecimiento">
+      <div class="card">
+        <div class="card-title">Añadir medición</div>
+        <div class="siesta-form" style="grid-template-columns:1fr 1fr 1fr">
+          <div class="form-group">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="crec-fecha">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Peso (kg)</label>
+            <input type="number" class="form-input" id="crec-peso" placeholder="7.8" step="0.1" min="0" max="30">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Talla (cm)</label>
+            <input type="number" class="form-input" id="crec-talla" placeholder="65" step="0.5" min="0" max="120">
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="agregarMedicion()" style="margin-top:8px">+ Añadir</button>
+      </div>
+
+      <div id="crec-grafica-wrap" style="display:none">
+        <div class="card">
+          <div class="card-title">Curva de peso</div>
+          <canvas id="crec-chart-peso" height="160"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Curva de talla</div>
+          <canvas id="crec-chart-talla" height="160"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-title">Historial</div>
+          <div id="crec-historial"></div>
+        </div>
+      </div>
+
+      <div id="crec-empty" style="text-align:center;padding:24px;color:var(--text-light);font-size:0.82rem">
+        Añade la primera medición para ver la curva de crecimiento
+      </div>
+    </div>
+
+    <!-- VACUNAS -->
+    <div id="seg-vacunas" style="display:none">
+      <div class="tip-box">Calendario de la <strong>Comunidad de Madrid</strong> calculado desde la fecha de nacimiento de Mauro. Pulsa ✓ para marcar como administrada.</div>
+      <div id="vacunas-list"></div>
+    </div>
+
+    <!-- DENTICION -->
+    <div id="seg-dientes" style="display:none">
+      <div class="tip-box">Pulsa cada diente para registrar la fecha en que salió. Los dientes de leche son <strong>20 en total</strong>.</div>
+      <div class="card" style="text-align:center">
+        <div style="font-size:0.72rem;color:var(--text-light);margin-bottom:12px">Toca un diente para registrarlo</div>
+        <div id="dental-map"></div>
+      </div>
+      <div id="diente-modal" style="display:none; margin-top:8px">
+        <div class="card">
+          <div class="card-title" id="diente-modal-title">Registrar diente</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
+            <input type="date" class="form-input" id="diente-fecha" style="flex:1">
+            <button class="btn-primary" onclick="guardarDiente()">Guardar</button>
+            <button onclick="document.getElementById('diente-modal').style.display='none'" style="background:none;border:none;color:var(--text-light);font-size:1.2rem;cursor:pointer">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="sec-label">Orden típico de salida</div>
+      <div class="card">
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">1º Incisivos centrales inferiores</div><div class="alimento-como">4-7 meses — los dos del centro abajo</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">2º Incisivos centrales superiores</div><div class="alimento-como">6-10 meses</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">3º Incisivos laterales</div><div class="alimento-como">9-13 meses</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">4º Primeros molares</div><div class="alimento-como">12-16 meses</div></div></div>
+        <div class="alimento-item"><div class="alimento-info"><div class="alimento-nombre">5º Caninos</div><div class="alimento-como">16-20 meses</div></div></div>
+        <div class="alimento-item" style="border:none"><div class="alimento-info"><div class="alimento-nombre">6º Segundos molares</div><div class="alimento-como">20-30 meses</div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── GOOGLE SHEETS SYNC ───────────────────────────────────────────────────────
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyrkqReGv1OLhJaHDuu4NqJ3OLnsnG6BRSMY49NbFnP2rINTA0OZXQdAvDoOvXdfUq8kA/exec';
+
+async function syncToSheets(data) {
+  try {
+    await fetch(SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch(e) {
+    console.log('Sync error:', e);
+  }
+}
+
+function showSyncStatus(msg, ok) {
+  let el = document.getElementById('sync-status');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'sync-status';
+    el.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:' + (ok ? '#2D5016' : '#C4694F') + ';color:#fff;font-size:0.72rem;font-weight:600;padding:6px 14px;border-radius:20px;z-index:999;transition:opacity 0.3s';
+    document.body.appendChild(el);
+  }
+  el.style.background = ok ? '#2D5016' : '#C4694F';
+  el.textContent = msg;
+  el.style.opacity = '1';
+  setTimeout(() => { el.style.opacity = '0'; }, 2500);
+}
+
+// ── LOCAL STORAGE ────────────────────────────────────────────────────────────
+function saveData() {
+  localStorage.setItem('mauro-siestas', JSON.stringify(siestas));
+  localStorage.setItem('mauro-diario', JSON.stringify(diario));
+  localStorage.setItem('mauro-noches', JSON.stringify(noches));
+}
+
+function loadData() {
+  try {
+    const s = localStorage.getItem('mauro-siestas');
+    const d = localStorage.getItem('mauro-diario');
+    const n = localStorage.getItem('mauro-noches');
+    if (s) siestas = JSON.parse(s);
+    if (d) diario = JSON.parse(d);
+    if (n) noches = JSON.parse(n);
+  } catch(e) {}
+}
+
+// ── TIPO DE TOMA ──────────────────────────────────────────────────────────────
+let tipoActivo = 'solido';
+
+function selectTipo(tipo, btn) {
+  tipoActivo = tipo;
+  document.querySelectorAll('.tipo-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('input-solido').style.display = tipo === 'solido' ? 'flex' : 'none';
+  document.getElementById('input-pecho').style.display = tipo === 'pecho' ? 'block' : 'none';
+  document.getElementById('input-biberon').style.display = tipo === 'biberon' ? 'block' : 'none';
+}
+
+function agregarPecho() {
+  const fecha = document.getElementById('diario-fecha').value;
+  const hora = document.getElementById('diario-hora-pecho').value;
+  if (!fecha) return;
+  const texto = hora ? `🤱 Toma de pecho a las ${hora}` : `🤱 Toma de pecho`;
+  if (!diario[fecha]) diario[fecha] = { desayuno: [], comida: [], merienda: [], cena: [] };
+  diario[fecha][tomaActiva].push(texto);
+  document.getElementById('diario-hora-pecho').value = '';
+  saveData();
+  renderDiario();
+  syncToSheets({ type: 'comida', fecha, toma: tomaActiva, alimento: texto })
+    .then(() => showSyncStatus('✓ Guardado en Google Sheets', true));
+}
+
+function agregarBiberon() {
+  const fecha = document.getElementById('diario-fecha').value;
+  const ml = document.getElementById('diario-ml').value;
+  const hora = document.getElementById('diario-hora-biberon').value;
+  if (!fecha || !ml) return;
+  const texto = hora ? `🍼 Biberón ${ml}ml a las ${hora}` : `🍼 Biberón ${ml}ml`;
+  if (!diario[fecha]) diario[fecha] = { desayuno: [], comida: [], merienda: [], cena: [] };
+  diario[fecha][tomaActiva].push(texto);
+  document.getElementById('diario-ml').value = '';
+  document.getElementById('diario-hora-biberon').value = '';
+  saveData();
+  renderDiario();
+  syncToSheets({ type: 'comida', fecha, toma: tomaActiva, alimento: texto })
+    .then(() => showSyncStatus('✓ Guardado en Google Sheets', true));
+}
+
+// ── RESET TIMER ───────────────────────────────────────────────────────────────
+function resetTimer(idx, totalSecs) {
+  const t = timerState[idx];
+  clearInterval(t.interval);
+  t.running = false;
+  t.remaining = totalSecs;
+  const display = document.getElementById(`timer-display-${idx}`);
+  const btn = document.getElementById(`timer-btn-${idx}`);
+  display.textContent = formatTime(totalSecs);
+  display.classList.remove('running', 'done');
+  btn.textContent = '▶';
+  btn.classList.remove('running', 'done');
+}
+
+// ── TIMERS ───────────────────────────────────────────────────────────────────
+const timerState = [
+  { interval: null, remaining: 180, total: 180, running: false },
+  { interval: null, remaining: 180, total: 180, running: false },
+  { interval: null, remaining: 240, total: 240, running: false },
+];
+
+function toggleTimer(idx, totalSecs) {
+  const t = timerState[idx];
+  const display = document.getElementById(`timer-display-${idx}`);
+  const btn = document.getElementById(`timer-btn-${idx}`);
+
+  if (t.running) {
+    // Pause
+    clearInterval(t.interval);
+    t.running = false;
+    btn.textContent = '▶';
+    btn.classList.remove('running');
+    display.classList.remove('running');
+  } else if (display.classList.contains('done')) {
+    // Reset
+    clearInterval(t.interval);
+    t.remaining = totalSecs;
+    t.running = false;
+    display.textContent = formatTime(totalSecs);
+    display.classList.remove('done');
+    btn.textContent = '▶';
+    btn.classList.remove('done');
+  } else {
+    // Start
+    t.total = totalSecs;
+    if (t.remaining <= 0) t.remaining = totalSecs;
+    t.running = true;
+    btn.textContent = '⏸';
+    btn.classList.add('running');
+    display.classList.add('running');
+
+    t.interval = setInterval(() => {
+      t.remaining--;
+      display.textContent = formatTime(t.remaining);
+      if (t.remaining <= 0) {
+        clearInterval(t.interval);
+        t.running = false;
+        display.textContent = '✓';
+        display.classList.remove('running');
+        display.classList.add('done');
+        btn.textContent = '↺';
+        btn.classList.remove('running');
+        btn.classList.add('done');
+        // Vibrate if supported
+        if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+      }
+    }, 1000);
+  }
+}
+
+function formatTime(secs) {
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;
+  return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+// ── SEGUIMIENTO ───────────────────────────────────────────────────────────────
+function showSegTab(tab, btn) {
+  ['crecimiento','vacunas','dientes'].forEach(t => {
+    document.getElementById(`seg-${t}`).style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#seg-tabs .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'vacunas') renderVacunas();
+  if (tab === 'dientes') renderDentalMap();
+  if (tab === 'crecimiento') renderCrecimiento();
+}
+
+// ── CRECIMIENTO ───────────────────────────────────────────────────────────────
+let mediciones = [];
+
+function agregarMedicion() {
+  const fecha = document.getElementById('crec-fecha').value;
+  const peso = parseFloat(document.getElementById('crec-peso').value);
+  const talla = parseFloat(document.getElementById('crec-talla').value);
+  if (!fecha || (!peso && !talla)) return;
+  mediciones.push({ fecha, peso: peso || null, talla: talla || null });
+  mediciones.sort((a,b) => a.fecha.localeCompare(b.fecha));
+  document.getElementById('crec-peso').value = '';
+  document.getElementById('crec-talla').value = '';
+  saveSeguimiento();
+  renderCrecimiento();
+}
+
+function renderCrecimiento() {
+  if (mediciones.length === 0) {
+    document.getElementById('crec-grafica-wrap').style.display = 'none';
+    document.getElementById('crec-empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('crec-grafica-wrap').style.display = 'block';
+  document.getElementById('crec-empty').style.display = 'none';
+  const labels = mediciones.map(m => m.fecha.split('-').slice(1).reverse().join('/'));
+  const pesos = mediciones.map(m => m.peso);
+  const tallas = mediciones.map(m => m.talla);
+  setTimeout(() => {
+    drawChart('crec-chart-peso', labels, pesos, 'Peso (kg)', '#2D5016', '#E8F0E0');
+    drawChart('crec-chart-talla', labels, tallas, 'Talla (cm)', '#2B5F8A', '#E4EFF7');
+  }, 50);
+  const hist = document.getElementById('crec-historial');
+  hist.innerHTML = [...mediciones].reverse().map((m, i) => `
+    <div class="alimento-item" ${i === mediciones.length-1 ? 'style="border:none"' : ''}>
+      <div class="alimento-info">
+        <div class="alimento-nombre">${m.fecha.split('-').reverse().join('/')}</div>
+        <div class="alimento-como">${m.peso ? `⚖️ ${m.peso} kg` : ''} ${m.talla ? `📏 ${m.talla} cm` : ''}</div>
+      </div>
+      <button onclick="borrarMedicion(${mediciones.indexOf(m)})" style="background:none;border:none;color:var(--text-light);cursor:pointer;font-size:0.85rem">✕</button>
+    </div>`).join('');
+}
+
+function borrarMedicion(idx) {
+  mediciones.splice(idx, 1);
+  saveSeguimiento();
+  renderCrecimiento();
+}
+
+function drawChart(canvasId, labels, data, label, color, bgColor) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.parentElement.offsetWidth - 32 || 300;
+  canvas.width = W;
+  canvas.height = 160;
+  ctx.clearRect(0, 0, W, 160);
+  const validData = data.filter(d => d !== null);
+  if (validData.length === 0) return;
+  const pad = { top: 16, right: 16, bottom: 28, left: 38 };
+  const cW = W - pad.left - pad.right;
+  const cH = 160 - pad.top - pad.bottom;
+  const minV = Math.min(...validData) * 0.97;
+  const maxV = Math.max(...validData) * 1.03;
+  ctx.fillStyle = bgColor;
+  ctx.fillRect(0, 0, W, 160);
+  ctx.strokeStyle = 'rgba(0,0,0,0.07)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (cH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + cW, y); ctx.stroke();
+    const val = maxV - ((maxV - minV) / 4) * i;
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    ctx.font = '9px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(val.toFixed(1), pad.left - 3, y + 3);
+  }
+  const points = data.map((d, i) => ({
+    x: pad.left + (labels.length === 1 ? cW/2 : (i / (labels.length-1)) * cW),
+    y: d !== null ? pad.top + cH - ((d - minV) / (maxV - minV)) * cH : null
+  }));
+  ctx.strokeStyle = color; ctx.lineWidth = 2.5; ctx.lineJoin = 'round';
+  ctx.beginPath(); let started = false;
+  points.forEach(p => {
+    if (p.y === null) return;
+    if (!started) { ctx.moveTo(p.x, p.y); started = true; } else ctx.lineTo(p.x, p.y);
+  });
+  ctx.stroke();
+  points.forEach((p, i) => {
+    if (p.y === null) return;
+    ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = 'rgba(0,0,0,0.35)'; ctx.font = '8px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(labels[i], p.x, 160 - 6);
+    if (data[i] !== null) { ctx.fillStyle = color; ctx.font = 'bold 9px sans-serif'; ctx.fillText(data[i], p.x, p.y - 7); }
+  });
+}
+
+// ── VACUNAS ───────────────────────────────────────────────────────────────────
+const VACUNAS_CM = [
+  { mes: 0,  nombre: 'Hepatitis B (1ª dosis)' },
+  { mes: 2,  nombre: 'Hexavalente 1ª — DTPa, Hib, VPI, HB' },
+  { mes: 2,  nombre: 'Neumocócica (1ª)' },
+  { mes: 2,  nombre: 'Rotavirus (1ª) — oral' },
+  { mes: 4,  nombre: 'Hexavalente (2ª)' },
+  { mes: 4,  nombre: 'Neumocócica (2ª)' },
+  { mes: 4,  nombre: 'Rotavirus (2ª) — oral' },
+  { mes: 6,  nombre: 'Hexavalente (3ª)' },
+  { mes: 11, nombre: 'Hexavalente (4ª)' },
+  { mes: 11, nombre: 'Neumocócica (3ª)' },
+  { mes: 12, nombre: 'Triple vírica SRP (1ª)' },
+  { mes: 12, nombre: 'Meningocócica B (1ª)' },
+  { mes: 15, nombre: 'Varicela (1ª)' },
+  { mes: 15, nombre: 'Meningocócica C' },
+  { mes: 18, nombre: 'DTPa (refuerzo)' },
+  { mes: 36, nombre: 'Triple vírica SRP (2ª)' },
+  { mes: 36, nombre: 'Varicela (2ª)' },
+  { mes: 72, nombre: 'DTPa + VPI (6 años)' },
+  { mes: 72, nombre: 'Meningocócica ACWY' },
+];
+
+let vacunasAdm = {};
+
+function renderVacunas() {
+  const birth = new Date(document.getElementById('birth-date').value || '2026-03-15');
+  const today = new Date();
+  const list = document.getElementById('vacunas-list');
+  list.innerHTML = '';
+  let mesAnterior = -1;
+  VACUNAS_CM.forEach((v, idx) => {
+    const fechaV = new Date(birth);
+    fechaV.setMonth(fechaV.getMonth() + v.mes);
+    const pasada = today > fechaV;
+    const proxima = !pasada && (fechaV - today) < 45 * 24 * 60 * 60 * 1000;
+    const hecha = !!vacunasAdm[idx];
+    if (v.mes !== mesAnterior) {
+      const lbl = document.createElement('div');
+      lbl.className = 'sec-label'; lbl.style.marginTop = '10px';
+      lbl.textContent = v.mes === 0 ? 'Al nacer' : `${v.mes} meses — ${fechaV.toLocaleDateString('es-ES',{month:'long',year:'numeric'})}`;
+      list.appendChild(lbl);
+      mesAnterior = v.mes;
+    }
+    const item = document.createElement('div');
+    item.style.cssText = `display:flex;align-items:center;gap:10px;padding:9px 12px;background:${hecha?'#e1f5ee':pasada&&!hecha?'#fff8e1':proxima?'#fce7f0':'#fff'};border-radius:10px;margin-bottom:5px;border:1px solid ${hecha?'#a8e6cf':pasada&&!hecha?'#ffe082':proxima?'#f0c4b8':'var(--border)'}`;
+    item.innerHTML = `
+      <div style="flex:1">
+        <div style="font-size:0.82rem;font-weight:600;color:${hecha?'var(--green-dark)':'var(--text)'}">${hecha?'✓ ':''}${v.nombre}</div>
+        <div style="font-size:0.68rem;color:var(--text-light);margin-top:1px">${fechaV.toLocaleDateString('es-ES')}${proxima?' ⚠️ Próxima':''}</div>
+      </div>
+      <button onclick="toggleVacuna(${idx})" style="width:28px;height:28px;border-radius:50%;border:2px solid ${hecha?'var(--green-mid)':'var(--border)'};background:${hecha?'var(--green-mid)':'white'};color:${hecha?'white':'var(--text-light)'};font-size:0.85rem;cursor:pointer">${hecha?'✓':''}</button>`;
+    list.appendChild(item);
+  });
+}
+
+function toggleVacuna(idx) {
+  vacunasAdm[idx] = !vacunasAdm[idx];
+  saveSeguimiento();
+  renderVacunas();
+}
+
+// ── DENTICIÓN ─────────────────────────────────────────────────────────────────
+// ── DENTICIÓN ─────────────────────────────────────────────────────────────────
+const DIENTES = [
+  {id:'S5R',n:'2º molar superior derecho', jaw:'S', pos:0},
+  {id:'S4R',n:'1º molar superior derecho', jaw:'S', pos:1},
+  {id:'S3R',n:'Canino superior derecho',   jaw:'S', pos:2},
+  {id:'S2R',n:'Incisivo lateral sup der',  jaw:'S', pos:3},
+  {id:'S1R',n:'Incisivo central sup der',  jaw:'S', pos:4},
+  {id:'S1', n:'Incisivo central sup izq',  jaw:'S', pos:5},
+  {id:'S2', n:'Incisivo lateral sup izq',  jaw:'S', pos:6},
+  {id:'S3', n:'Canino superior izquierdo', jaw:'S', pos:7},
+  {id:'S4', n:'1º molar superior izquierdo',jaw:'S',pos:8},
+  {id:'S5', n:'2º molar superior izquierdo',jaw:'S',pos:9},
+  {id:'I5R',n:'2º molar inferior derecho', jaw:'I', pos:0},
+  {id:'I4R',n:'1º molar inferior derecho', jaw:'I', pos:1},
+  {id:'I3R',n:'Canino inferior derecho',   jaw:'I', pos:2},
+  {id:'I2R',n:'Incisivo lateral inf der',  jaw:'I', pos:3},
+  {id:'I1R',n:'Incisivo central inf der',  jaw:'I', pos:4},
+  {id:'I1', n:'Incisivo central inf izq',  jaw:'I', pos:5},
+  {id:'I2', n:'Incisivo lateral inf izq',  jaw:'I', pos:6},
+  {id:'I3', n:'Canino inferior izquierdo', jaw:'I', pos:7},
+  {id:'I4', n:'1º molar inferior izquierdo',jaw:'I',pos:8},
+  {id:'I5', n:'2º molar inferior izquierdo',jaw:'I',pos:9},
+];
+
+let dientesRegistrados = {};
+let dienteActivo = null;
+
+function renderDentalMap() {
+  const map = document.getElementById('dental-map');
+  const total = Object.keys(dientesRegistrados).length;
+
+  const toothW = [18,16,13,11,13,13,11,13,16,18];
+  const toothHS = [22,22,26,20,22,22,20,26,22,22];
+  const toothHI = [20,20,24,18,20,20,18,24,20,20];
+  const gap = 2;
+  const ox = 10;
+  const totalW = toothW.reduce((a,b)=>a+b,0) + gap*9;
+  const svgW = totalW + ox*2;
+  const maxS = Math.max(...toothHS);
+  const maxI = Math.max(...toothHI);
+  const archGap = 8;
+  const svgH = maxS + archGap + maxI + 22;
+
+  const sup = DIENTES.filter(d=>d.jaw==='S');
+  const inf = DIENTES.filter(d=>d.jaw==='I');
+
+  function toothSVG(d, idx, isUpper) {
+    let x = ox;
+    for(let i=0;i<idx;i++) x += toothW[i] + gap;
+    const w = toothW[idx];
+    const h = isUpper ? toothHS[idx] : toothHI[idx];
+    const y = isUpper ? maxS - h : maxS + archGap;
+    const reg = dientesRegistrados[d.id];
+    const fill  = reg ? '#E8F0E0' : '#FFFFFF';
+    const stroke= reg ? '#4A7C2F' : '#E2DBD0';
+    const tc    = reg ? '#2D5016' : '#C8C4BC';
+    const label = reg ? '✓' : '·';
+    const dateStr = reg ? reg.split('-').slice(1).reverse().join('/') : '';
+    return `<g onclick="abrirDiente('${d.id}','${d.n}')" style="cursor:pointer">
+      <title>${d.n}${reg?'\n'+dateStr:' — pulsa para registrar'}</title>
+      <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" ry="3"
+        fill="${fill}" stroke="${stroke}" stroke-width="1.5"/>
+      <text x="${x+w/2}" y="${y+h/2+4}" text-anchor="middle"
+        font-size="${reg?9:10}" font-weight="${reg?'bold':'normal'}" fill="${tc}">${label}</text>
+      ${reg && w>=14 ? `<text x="${x+w/2}" y="${y+h-3}" text-anchor="middle" font-size="5.5" fill="${tc}" opacity="0.7">${dateStr}</text>` : ''}
+    </g>`;
+  }
+
+  const supSVG = sup.map((d,i) => toothSVG(d, i, true)).join('');
+  const infSVG = inf.map((d,i) => toothSVG(d, i, false)).join('');
+  const gumY_S = maxS;
+  const gumY_I = maxS + archGap;
+
+  map.innerHTML = `
+    <div style="font-size:0.74rem;color:var(--text-mid);margin-bottom:8px;text-align:center">
+      <strong style="color:var(--green-dark)">${total}</strong> de 20 dientes · Pulsa cualquier diente para registrarlo
+    </div>
+    <div style="display:flex;justify-content:center;overflow-x:auto;padding:4px 0">
+      <svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+        <rect width="${svgW}" height="${svgH}" rx="10" fill="#FAFAF7"/>
+        <text x="${svgW/2}" y="11" text-anchor="middle" font-size="7" fill="#9A9488" font-family="sans-serif">SUPERIOR</text>
+        <rect x="${ox}" y="${gumY_S-3}" width="${totalW}" height="5" rx="2" fill="#F7C5B8" opacity="0.5"/>
+        <rect x="${ox}" y="${gumY_I-2}" width="${totalW}" height="5" rx="2" fill="#F7C5B8" opacity="0.5"/>
+        ${supSVG}
+        ${infSVG}
+        <text x="${svgW/2}" y="${svgH-3}" text-anchor="middle" font-size="7" fill="#9A9488" font-family="sans-serif">INFERIOR</text>
+      </svg>
+    </div>
+    <div style="display:flex;gap:14px;justify-content:center;margin-top:6px;font-size:0.68rem;color:var(--text-light)">
+      <span>· Sin registrar</span><span style="color:var(--green-dark)">✓ Con fecha</span>
+    </div>`;
+}
+
+function abrirDiente(id, nombre) {
+  dienteActivo = id;
+  document.getElementById('diente-modal-title').textContent = nombre;
+  document.getElementById('diente-fecha').value = dientesRegistrados[id] || new Date().toISOString().split('T')[0];
+  document.getElementById('diente-modal').style.display = 'block';
+  document.getElementById('diente-modal').scrollIntoView({behavior:'smooth'});
+}
+
+function guardarDiente() {
+  if (!dienteActivo) return;
+  const fecha = document.getElementById('diente-fecha').value;
+  if (!fecha) return;
+  dientesRegistrados[dienteActivo] = fecha;
+  document.getElementById('diente-modal').style.display = 'none';
+  saveSeguimiento();
+  renderDentalMap();
+}
+
+function saveSeguimiento() {
+  localStorage.setItem('mauro-mediciones', JSON.stringify(mediciones));
+  localStorage.setItem('mauro-vacunas', JSON.stringify(vacunasAdm));
+  localStorage.setItem('mauro-dientes', JSON.stringify(dientesRegistrados));
+}
+
+function loadSeguimiento() {
+  try {
+    const m = localStorage.getItem('mauro-mediciones');
+    const v = localStorage.getItem('mauro-vacunas');
+    const d = localStorage.getItem('mauro-dientes');
+    if (m) mediciones = JSON.parse(m);
+    if (v) vacunasAdm = JSON.parse(v);
+    if (d) dientesRegistrados = JSON.parse(d);
+  } catch(e) {}
+}
+
+// ── NAVIGATION ──────────────────────────────────────────────────────────────
+function showScreen(name, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'siestas') {
+    const birth = new Date(document.getElementById('birth-date').value || '2026-03-15');
+    const months = Math.floor((new Date() - birth) / (1000 * 60 * 60 * 24 * 30.44));
+    updateVentana(months);
+  }
+}
+
+function showAvionTab(tab, btn) {
+  ['0-6','6-12','12-24','2-4'].forEach(t => {
+    document.getElementById(`avion-${t}`).style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#avion-age-tabs .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── SUB TABS ─────────────────────────────────────────────────────────────────
+function showNutriTab(tab, btn) {
+  document.getElementById('nutri-guia').style.display = tab === 'guia' ? 'block' : 'none';
+  document.getElementById('nutri-diario').style.display = tab === 'diario' ? 'block' : 'none';
+  document.getElementById('nutri-seguridad').style.display = tab === 'seguridad' ? 'block' : 'none';
+  document.querySelectorAll('#screen-nutricion .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'diario') {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('diario-fecha').value = today;
+    renderDiario();
+  }
+}
+
+function showSuenoTab(tab, btn) {
+  document.getElementById('sueno-registro').style.display = tab === 'registro' ? 'block' : 'none';
+  document.getElementById('sueno-cuna').style.display = tab === 'cuna' ? 'block' : 'none';
+  document.getElementById('sueno-nocturno').style.display = tab === 'nocturno' ? 'block' : 'none';
+  document.querySelectorAll('#screen-siestas .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab === 'nocturno') {
+    const _n = new Date();
+    const nd = `${_n.getFullYear()}-${String(_n.getMonth()+1).padStart(2,'0')}-${String(_n.getDate()).padStart(2,'0')}`;
+    if (document.getElementById('noche-fecha') && !document.getElementById('noche-fecha').value) {
+      document.getElementById('noche-fecha').value = nd;
+    }
+    renderNoches();
+  }
+}
+
+// ── SUEÑO NOCTURNO ────────────────────────────────────────────────────────────
+let noches = [];
+
+function agregarNoche() {
+  const fechaInput = document.getElementById('noche-fecha').value;
+  const inicio = document.getElementById('noche-inicio').value;
+  const fin = document.getElementById('noche-fin').value;
+  const despertares = document.getElementById('noche-despertares').value || '0';
+  const notas = document.getElementById('noche-notas').value.trim();
+  if (!fechaInput || !inicio || !fin) return;
+
+  noches.unshift({ fecha: fechaInput, inicio, fin, despertares, notas });
+  if (noches.length > 14) noches = noches.slice(0, 14);
+
+  document.getElementById('noche-fecha').value = '';
+  document.getElementById('noche-inicio').value = '';
+  document.getElementById('noche-fin').value = '';
+  document.getElementById('noche-despertares').value = '';
+  document.getElementById('noche-notas').value = '';
+
+  saveData();
+  renderNoches();
+  syncToSheets({ type: 'noche', fecha: fechaInput, inicio, fin, despertares, notas })
+    .then(() => showSyncStatus('✓ Guardado en Google Sheets', true));
+}
+
+function renderNoches() {
+  const log = document.getElementById('noches-log');
+  if (noches.length === 0) {
+    log.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Aún no has registrado ninguna noche</div>';
+    return;
+  }
+  log.innerHTML = noches.map((n, i) => {
+    const fechaDisplay = n.fecha ? n.fecha.split('-').reverse().join('/') : '';
+    return `
+      <div class="siesta-item" style="margin-bottom:6px">
+        <div class="siesta-dot" style="background:var(--green-dark)"></div>
+        <div class="siesta-info" style="flex:1">
+          <div class="siesta-time">🌙 ${n.inicio} — ☀️ ${n.fin} <span style="font-size:0.68rem;color:var(--text-light)">${fechaDisplay}</span></div>
+          <div class="siesta-dur">${n.despertares} despertar${n.despertares !== '1' ? 'es' : ''}${n.notas ? ' · ' + n.notas : ''}</div>
+        </div>
+        <button class="siesta-delete" onclick="borrarNoche(${i})">✕</button>
+      </div>`;
+  }).join('');
+}
+
+function borrarNoche(idx) {
+  noches.splice(idx, 1);
+  saveData();
+  renderNoches();
+}
+
+function showRabietaTab(tab, btn) {
+  document.getElementById('rabieta-fases').style.display = tab === 'fases' ? 'block' : 'none';
+  document.getElementById('rabieta-situaciones').style.display = tab === 'situaciones' ? 'block' : 'none';
+  document.getElementById('rabieta-hacks').style.display = tab === 'hacks' ? 'block' : 'none';
+  document.querySelectorAll('#screen-rabietas .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── DIARIO ALIMENTARIO ────────────────────────────────────────────────────────
+let diario = {}; // { 'YYYY-MM-DD': { desayuno: [], comida: [], merienda: [], cena: [] } }
+let tomaActiva = 'desayuno';
+
+function selectToma(btn) {
+  tomaActiva = btn.dataset.toma;
+  document.querySelectorAll('.toma-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function agregarAlimento() {
+  const fecha = document.getElementById('diario-fecha').value;
+  const alimento = document.getElementById('diario-alimento').value.trim();
+  if (!fecha || !alimento) return;
+
+  if (!diario[fecha]) diario[fecha] = { desayuno: [], comida: [], merienda: [], cena: [] };
+  diario[fecha][tomaActiva].push(alimento);
+  document.getElementById('diario-alimento').value = '';
+  saveData();
+  renderDiario();
+
+  syncToSheets({ type: 'comida', fecha, toma: tomaActiva, alimento })
+    .then(() => showSyncStatus('✓ Guardado en Google Sheets', true))
+    .catch(() => showSyncStatus('Guardado solo en local', false));
+}
+
+function borrarAlimentoDiario(fecha, toma, idx) {
+  diario[fecha][toma].splice(idx, 1);
+  saveData();
+  renderDiario();
+}
+
+const TOMA_CONFIG = {
+  desayuno: { emoji: '☀️', label: 'Desayuno', cls: 'desayuno-head' },
+  comida:   { emoji: '🍽️', label: 'Comida',   cls: 'comida-head' },
+  merienda: { emoji: '🍎', label: 'Merienda', cls: 'merienda-head' },
+  cena:     { emoji: '🌙', label: 'Cena',      cls: 'cena-head' },
+};
+
+function renderDiario() {
+  const fecha = document.getElementById('diario-fecha').value;
+  const res = document.getElementById('diario-resumen');
+  if (!fecha) { res.innerHTML = ''; return; }
+
+  const data = diario[fecha] || { desayuno: [], comida: [], merienda: [], cena: [] };
+  const tomas = Object.entries(TOMA_CONFIG);
+  const hasAny = tomas.some(([k]) => data[k] && data[k].length > 0);
+
+  if (!hasAny) {
+    res.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Sin registros para este día todavía</div>`;
+    return;
+  }
+
+  // Calcular total ml de biberón del día
+  let totalMl = 0;
+  tomas.forEach(([key]) => {
+    const items = data[key] || [];
+    items.forEach(item => {
+      const match = item.match(/🍼 Biberón (\d+)ml/);
+      if (match) totalMl += parseInt(match[1]);
+    });
+  });
+
+  const objetivo = 1200;
+  const pct = Math.min(totalMl / objetivo * 100, 100);
+  const barColor = totalMl >= objetivo ? 'var(--green-mid)' : totalMl >= 800 ? 'var(--amber)' : 'var(--terra)';
+  const mlHtml = `
+    <div style="background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:12px;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:0.78rem;font-weight:600;color:var(--text)">🍼 Total biberón hoy</div>
+        <div style="font-size:0.95rem;font-weight:700;color:${barColor}">${totalMl}ml <span style="font-size:0.7rem;font-weight:400;color:var(--text-light)">/ ${objetivo}ml</span></div>
+      </div>
+      <div style="background:var(--cream-mid);border-radius:10px;height:8px;overflow:hidden">
+        <div style="background:${barColor};height:100%;width:${pct}%;border-radius:10px;transition:width 0.3s"></div>
+      </div>
+      <div style="font-size:0.68rem;color:var(--text-light);margin-top:5px">
+        ${totalMl >= objetivo ? '✅ Objetivo alcanzado' : `Faltan ${objetivo - totalMl}ml para el objetivo diario`}
+      </div>
+    </div>`;
+
+  res.innerHTML = mlHtml + tomas.map(([key, cfg]) => {
+    const items = data[key] || [];
+    if (items.length === 0) return '';
+    return `
+      <div class="diario-toma-block">
+        <div class="diario-toma-head ${cfg.cls}">${cfg.emoji} ${cfg.label}</div>
+        <div class="diario-toma-items">
+          ${items.map((a, i) => `
+            <div class="diario-alimento-item">
+              <span>${a}</span>
+              <button class="diario-del" onclick="borrarAlimentoDiario('${fecha}','${key}',${i})">✕</button>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── HITOS DATA ───────────────────────────────────────────────────────────────
+const HITOS = [
+  { desde: 0, hasta: 2, title: "Sonrisa social", desc: "Sonríe respondiendo a tu cara y voz", icon: "😊" },
+  { desde: 0, hasta: 2, title: "Sigue objetos con la vista", desc: "Rastrea movimientos lentos a 20-30cm", icon: "👁️" },
+  { desde: 1, hasta: 3, title: "Vocaliza vocales", desc: "Responde con agús y vocalizaciones", icon: "🗣️" },
+  { desde: 2, hasta: 4, title: "Sostiene la cabeza", desc: "Control de cabeza en tummy time", icon: "💪" },
+  { desde: 2, hasta: 4, title: "Reconoce tu voz", desc: "Se gira hacia tu voz cuando le hablas", icon: "👂" },
+  { desde: 3, hasta: 5, title: "Ríe a carcajadas", desc: "Primera carcajada real ante estímulos", icon: "😂" },
+  { desde: 3, hasta: 5, title: "Imita expresiones", desc: "Imita pedorretas y gestos faciales", icon: "🎭" },
+  { desde: 4, hasta: 6, title: "Se da la vuelta", desc: "De boca arriba a boca abajo", icon: "🔄" },
+  { desde: 4, hasta: 6, title: "Agarra objetos", desc: "Intenta agarrar juguetes con intención", icon: "✋" },
+  { desde: 4, hasta: 6, title: "Balbucea consonantes", desc: "Ba-ba, ma-ma, da-da sin significado", icon: "💬" },
+  { desde: 6, hasta: 9, title: "Se sienta solo", desc: "Se mantiene sentado sin apoyo", icon: "🧘" },
+  { desde: 6, hasta: 9, title: "Permanencia del objeto", desc: "Busca juguetes que desaparecen", icon: "🎁" },
+  { desde: 7, hasta: 10, title: "Gateo", desc: "Se desplaza gateando o arrastrándose", icon: "🐛" },
+  { desde: 8, hasta: 10, title: "Ansiedad de separación", desc: "Llora cuando te vas — normal y sano", icon: "🤗" },
+  { desde: 9, hasta: 12, title: "Se pone de pie", desc: "Se agarra a muebles para ponerse en pie", icon: "🦾" },
+  { desde: 10, hasta: 14, title: "Primera palabra", desc: "Palabra con significado real", icon: "🗣️" },
+  { desde: 11, hasta: 15, title: "Primeros pasos", desc: "Camina con apoyo o solo", icon: "👣" },
+];
+
+const ETAPAS = [
+  { max: 3, label: "Recién nacido", color: "#E8F0E0", textColor: "#2D5016" },
+  { max: 6, label: "Bebé pequeño", color: "#FBF2E0", textColor: "#7A4F00" },
+  { max: 9, label: "Bebé activo", color: "#E4EFF7", textColor: "#2B5F8A" },
+  { max: 12, label: "Bebé explorador", color: "#EEE8F7", textColor: "#4A2D8A" },
+  { max: 24, label: "Bebé mayor", color: "#F7E8EE", textColor: "#8A2D5A" },
+];
+
+// ── JUEGOS POR EDAD ───────────────────────────────────────────────────────────
+const JUEGOS = [
+  // 0-2 meses
+  { desde: 0, hasta: 2, icon: '👁️', titulo: 'Cara a cara', tipo: 'social',
+    desc: 'Pon tu cara a 20-30cm y hazle expresiones lentas: boca abierta, lengua fuera, cejas arriba. Dale 5 segundos para imitar. Es su primer "diálogo".',
+    tip: '💡 Hazlo cuando esté tranquilo y alerta, no antes de comer ni cuando está cansado.' },
+  { desde: 0, hasta: 2, icon: '🌈', titulo: 'Contraste visual', tipo: 'cognitivo',
+    desc: 'Mueve un objeto en blanco y negro (o rojo intenso) lentamente de lado a lado a 25cm. Observa cómo sigue con los ojos.',
+    tip: '💡 Los bebés ven mejor el contraste alto que los colores pastel en estos primeros meses.' },
+  { desde: 0, hasta: 2, icon: '🎵', titulo: 'Canciones con contacto', tipo: 'sensorial',
+    desc: 'Cántale canciones sencillas tocándole suavemente las manos, pies, barriga. La combinación de voz + tacto calma y estimula.',
+    tip: '💡 No importa si afinas. Tu voz es lo más tranquilizador que existe para él.' },
+
+  // 2-4 meses
+  { desde: 2, hasta: 4, icon: '🤸', titulo: 'Tummy time', tipo: 'motor',
+    desc: 'Boca abajo 2-3 veces al día, empezando por 2-3 minutos. Ponle un juguete de colores delante para que levante la cabeza a mirarlo.',
+    tip: '💡 Si llora al minuto, empieza encima de tu pecho recostada — también cuenta.' },
+  { desde: 2, hasta: 4, icon: '🎪', titulo: 'Gimnasio de suelo', tipo: 'motor',
+    desc: 'Coloca un arco con objetos colgantes sobre su cuerpo. Mueve su mano para que toque los colgantes — pronto lo hará solo buscándolos.',
+    tip: '💡 Cambia los objetos colgantes cada semana para mantener el interés.' },
+  { desde: 2, hasta: 4, icon: '😂', titulo: 'Pedorretas y cosquillas', tipo: 'social',
+    desc: 'Hazle pedorretas en la barriga, cuello o axilas. Imita sus vocalizaciones de vuelta alargándolas un poco. Busca la carcajada.',
+    tip: '💡 La primera carcajada suele aparecer entre los 3 y 4 meses. Recuérdala siempre.' },
+
+  // 4-6 meses
+  { desde: 4, hasta: 6, icon: '✋', titulo: 'Objetos para agarrar', tipo: 'motor',
+    desc: 'Ofrécele objetos de distintas texturas: un aro de dentición, una tela suave, un sonajero. Ponlos en su mano y deja que los lleve a la boca — es exploración, no suciedad.',
+    tip: '💡 Ahora mismo la boca es su principal órgano sensorial. Déjale explorar con ella.' },
+  { desde: 4, hasta: 6, icon: '🪞', titulo: 'Espejo', tipo: 'cognitivo',
+    desc: 'Ponle frente a un espejo irrompible y señala su reflejo: "¡Ese es Mauro!". Haz muecas y mira cómo reacciona al ver al bebé del espejo.',
+    tip: '💡 Todavía no sabe que es él, pero le encanta la "cara" que le devuelve la mirada.' },
+  { desde: 4, hasta: 6, icon: '🎶', titulo: 'Canciones con movimiento', tipo: 'lenguaje',
+    desc: 'Canciones que incluyen tocarle partes del cuerpo: "Cinco lobitos", "Palmas palmitas". Repite siempre las mismas — la repetición es aprendizaje.',
+    tip: '💡 Exagera la entonación — los bebés aprenden el ritmo del lenguaje antes que las palabras.' },
+  { desde: 4, hasta: 6, icon: '🫧', titulo: 'Pompas de jabón', tipo: 'sensorial',
+    desc: 'Sopla pompas delante de él y deja que las siga con la vista y las toque. Estimula el seguimiento visual, la coordinación ojo-mano y el asombro.',
+    tip: '💡 Funciona especialmente bien en la bañera — el agua le añade otra textura.' },
+  { desde: 4, hasta: 6, icon: '📖', titulo: 'Primeros libros', tipo: 'lenguaje',
+    desc: 'Libros de cartón con imágenes grandes y contrastadas. No leas el texto — señala la imagen, nómbrala, imita el sonido del animal. Hazlo interactivo.',
+    tip: '💡 5 minutos al día es suficiente. Lo importante es la rutina, no la duración.' },
+
+  // 6-9 meses
+  { desde: 6, hasta: 9, icon: '🫙', titulo: 'Coge y suelta', tipo: 'motor',
+    desc: 'Dale un objeto y un recipiente. Enséñale a soltarlo dentro. Al principio solo cogerá, pero la acción de "meter" aparece pronto y le fascina.',
+    tip: '💡 Los tuppers de cocina y botes de plástico valen perfectamente — no hace falta comprar nada.' },
+  { desde: 6, hasta: 9, icon: '🙈', titulo: 'Cu-cú', tipo: 'cognitivo',
+    desc: 'Cúbrete la cara con las manos o un pañuelo y aparece. Es el juego más potente para desarrollar la permanencia del objeto — aprende que lo que no ve sigue existiendo.',
+    tip: '💡 Cuando busca el juguete que has escondido bajo un trapo, es señal de que lo ha entendido.' },
+  { desde: 6, hasta: 9, icon: '🥁', titulo: 'Percusión casera', tipo: 'sensorial',
+    desc: 'Dale una cuchara de madera y pon delante un tupper, una caja, una fuente. Que golpee y explore los distintos sonidos que produce.',
+    tip: '💡 No pasa nada si hace ruido. La exploración causa-efecto es aprendizaje puro.' },
+  { desde: 6, hasta: 9, icon: '🧲', titulo: 'Objetos escondidos', tipo: 'cognitivo',
+    desc: 'Esconde un juguete bajo un trapo delante de él. Al principio señala dónde está; luego espera a que lo busque él solo.',
+    tip: '💡 Si ya lo busca sin ayuda, ya tiene permanencia del objeto. Es un gran hito cognitivo.' },
+
+  // 9-12 meses
+  { desde: 9, hasta: 12, icon: '🚶', titulo: 'Cruising (caminar agarrado)', tipo: 'motor',
+    desc: 'Coloca juguetes a lo largo del sofá para que se desplace lateralmente agarrado al borde. Es el paso previo a caminar solo.',
+    tip: '💡 Déjale descalzo siempre que puedas — los pies descalzos le dan mejor información del suelo.' },
+  { desde: 9, hasta: 12, icon: '👋', titulo: 'Gestos comunicativos', tipo: 'lenguaje',
+    desc: 'Enséñale adiós con la mano, "más" aplaudiendo, señalar con el dedo. Repítelo en contexto real cada vez que ocurra, no como ejercicio.',
+    tip: '💡 Señalar es el primer lenguaje. Cuando señale algo, nómbralo siempre.' },
+  { desde: 9, hasta: 12, icon: '🧱', titulo: 'Apilar y derribar', tipo: 'motor',
+    desc: 'Apila 2-3 bloques delante de él y déjale derribarlos. Luego enséñale a apilar uno encima de otro. El derribo le encanta más que el apilado.',
+    tip: '💡 Los vasos apilables de colores son perfectos — y baratos.' },
+  { desde: 9, hasta: 12, icon: '📞', titulo: 'Teléfono de juguete', tipo: 'social',
+    desc: 'Haz como que hablas por teléfono y pásaselo. Imita hablar. Le enseña turnos conversacionales y la imitación de acciones cotidianas.',
+    tip: '💡 La imitación de objetos cotidianos (cuchara, peine, vaso) es un gran paso cognitivo.' },
+
+  // 12-18 meses
+  { desde: 12, hasta: 18, icon: '🎨', titulo: 'Pintura de dedos', tipo: 'sensorial',
+    desc: 'Pintura no tóxica en papel grande. Sin objetivo artístico — solo exploración de la textura, el color y la causa-efecto. Prepara el suelo.',
+    tip: '💡 Si le cuesta tocar la pintura, empieza con puré de frutas sobre papel — comestible y estimulante.' },
+  { desde: 12, hasta: 18, icon: '⚽', titulo: 'Empujar y perseguir', tipo: 'motor',
+    desc: 'Rueda una pelota hacia él y espera que la devuelva. Es el inicio del juego compartido con turnos. Celebra cada devolución.',
+    tip: '💡 Las pelotas de distintos tamaños y texturas añaden variedad al juego.' },
+  { desde: 12, hasta: 18, icon: '🏡', titulo: 'Juego simbólico inicial', tipo: 'cognitivo',
+    desc: 'Dale una muñeca o peluche y simula darle de comer, dormir, taparle. Imítalo tú primero. Pronto lo hará solo.',
+    tip: '💡 El juego simbólico es el mayor indicador de desarrollo cognitivo y social a esta edad.' },
+];
+
+function renderJuegos(months) {
+  const container = document.getElementById('juegos-list');
+  if (!container) return;
+  const juegosActuales = JUEGOS.filter(j => months >= j.desde && months <= j.hasta + 1);
+  if (juegosActuales.length === 0) {
+    container.innerHTML = '<div style="font-size:0.8rem;color:var(--text-light);padding:8px 0">No hay juegos específicos para esta edad exacta</div>';
+    return;
+  }
+  container.innerHTML = juegosActuales.map(j => `
+    <div class="juego-card">
+      <div class="juego-header">
+        <div class="juego-icon">${j.icon}</div>
+        <div class="juego-titulo">${j.titulo}</div>
+        <span class="juego-tag ${j.tipo}">${j.tipo}</span>
+      </div>
+      <div class="juego-desc">${j.desc}</div>
+      <div class="juego-tip">${j.tip}</div>
+    </div>
+  `).join('');
+}
+
+// ── CALCULAR EDAD ─────────────────────────────────────────────────────────────
+function calcularEdad() {
+  const input = document.getElementById('birth-date').value;
+  if (!input) return;
+
+  const birth = new Date(input);
+  const today = new Date();
+  const diffMs = today - birth;
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const weeks = Math.floor(diffDays / 7);
+
+  const months = Math.floor(diffDays / 30.44);
+  const remDays = Math.floor(diffDays - months * 30.44);
+
+  // Update display
+  document.getElementById('age-display').style.display = 'block';
+  document.getElementById('age-placeholder').style.display = 'none';
+
+  let ageStr = '';
+  if (months === 0) ageStr = `${diffDays} días`;
+  else if (months < 12) ageStr = `${months} meses${remDays > 0 ? ` y ${remDays} días` : ''}`;
+  else {
+    const years = Math.floor(months / 12);
+    const remMonths = months % 12;
+    ageStr = `${years} año${years > 1 ? 's' : ''}${remMonths > 0 ? ` y ${remMonths} meses` : ''}`;
+  }
+
+  document.getElementById('age-text').textContent = ageStr;
+  document.getElementById('age-weeks').textContent = `Semana ${weeks} de vida`;
+  document.getElementById('ring-months').textContent = months;
+  document.getElementById('header-subtitle').textContent = `Mauro · ${ageStr}`;
+
+  // Ring animation (max 12 months for ring)
+  const pct = Math.min(months / 12, 1);
+  const circumference = 238.76;
+  const offset = circumference * (1 - pct);
+  document.getElementById('ring-fill').style.strokeDashoffset = offset;
+
+  // Etapa
+  const etapa = ETAPAS.find(e => months <= e.max) || ETAPAS[ETAPAS.length - 1];
+  const badge = document.getElementById('etapa-badge');
+  badge.textContent = `🌱 ${etapa.label}`;
+  badge.style.background = etapa.color;
+  badge.style.color = etapa.textColor;
+
+  // Hitos actuales
+  const hitosList = document.getElementById('hitos-list');
+  const hitosProx = document.getElementById('hitos-proximos');
+  hitosList.innerHTML = '';
+  hitosProx.innerHTML = '';
+
+  const actuales = HITOS.filter(h => months >= h.desde && months <= h.hasta + 1);
+  const proximos = HITOS.filter(h => h.desde > months && h.desde <= months + 3);
+
+  if (actuales.length === 0) {
+    hitosList.innerHTML = '<div style="font-size:0.8rem;color:var(--text-light);padding:8px 0">No hay hitos específicos para esta edad exacta</div>';
+  }
+
+  actuales.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hito';
+    const isDone = months > h.hasta;
+    div.innerHTML = `
+      <div class="hito-dot ${isDone ? 'ok' : 'soon'}"></div>
+      <div class="hito-text">
+        <div class="hito-title">${h.icon} ${h.title}</div>
+        <div class="hito-desc">${h.desc}</div>
+        <div class="hito-when">${isDone ? '✓ Ya debería verlo' : '👀 Observa ahora'}</div>
+      </div>`;
+    hitosList.appendChild(div);
+  });
+
+  proximos.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hito';
+    div.innerHTML = `
+      <div class="hito-dot future"></div>
+      <div class="hito-text">
+        <div class="hito-title" style="color:var(--text-mid)">${h.icon} ${h.title}</div>
+        <div class="hito-desc">${h.desc}</div>
+        <div class="hito-when">Aproximadamente en ${h.desde - months} ${h.desde - months === 1 ? 'mes' : 'meses'}</div>
+      </div>`;
+    hitosProx.appendChild(div);
+  });
+
+  if (proximos.length === 0) {
+    hitosProx.innerHTML = '<div style="font-size:0.8rem;color:var(--text-light);padding:8px 0">Los próximos hitos se mostrarán aquí</div>';
+  }
+
+  // Update ventana vigilia
+  updateVentana(months);
+
+  // Juegos por edad
+  renderJuegos(months);
+}
+
+function updateVentana(months) {
+  const v = document.getElementById('ventana-vigilia');
+  if (months <= 3) v.innerHTML = '⏰ Mauro aguanta despierto <strong>45min-1h</strong> entre siestas. Máximo 1h30.';
+  else if (months <= 5) v.innerHTML = '⏰ Mauro aguanta despierto <strong>1h30-2h</strong> entre siestas. Observa las señales.';
+  else if (months <= 8) v.innerHTML = '⏰ Mauro aguanta despierto <strong>2-3h</strong> entre siestas. Suele hacer 3 siestas al día.';
+  else if (months <= 12) v.innerHTML = '⏰ Mauro aguanta despierto <strong>3-4h</strong> entre siestas. Suele hacer 2 siestas al día.';
+  else v.innerHTML = '⏰ Con más de 12 meses suele hacer <strong>1-2 siestas</strong> al día. La siesta única se consolida hacia los 18 meses.';
+}
+
+// ── NUTRICION DATA ────────────────────────────────────────────────────────────
+const SEMANAS = [
+  {
+    id: 's1', label: 'S1', title: 'Verduras base + primeras frutas',
+    nota: '2 días c/u · muy triturado',
+    intro: 'Un alimento nuevo cada 2-3 días. Sin sal, sin azúcar, sin miel. AOVE en todas las verduras.',
+    alimentos: [
+      { nombre: '🎃 Calabaza', tex: 'Muy triturada', como: 'Cocida al vapor o TM7 + AOVE al final' },
+      { nombre: '🥕 Zanahoria', tex: 'Muy triturada', como: 'Cocida + AOVE. Mezcla con calabaza' },
+      { nombre: '🍠 Boniato', tex: 'Muy triturado', como: 'Cocido + AOVE' },
+      { nombre: '🥔 Patata', tex: 'Muy triturada', como: 'Cocida, base neutra para mezclar' },
+      { nombre: '🍌 Plátano maduro', tex: 'Chafado con tenedor', como: 'Que esté muy maduro — queda cremoso. Sin cocción' },
+      { nombre: '🥑 Aguacate', tex: 'Chafado con tenedor', como: 'Sin cocción + AOVE. Denso y fácil de chafar' },
+    ]
+  },
+  {
+    id: 's2', label: 'S2 ⭐', title: 'Más verduras + HIERRO',
+    nota: '2 días c/u · muy triturado + desmenuzado',
+    intro: '⭐ En cuanto tenga 2-3 verduras toleradas — mete la carne. No hay que esperar más. El hierro es urgente a los 6 meses.',
+    alimentos: [
+      { nombre: '🥒 Calabacín', tex: 'Muy triturado', como: 'Al vapor o TM7 + AOVE' },
+      { nombre: '🥦 Brócoli', tex: 'Muy triturado', como: 'Al vapor — vitamina C que mejora absorción del hierro' },
+      { nombre: '🐔 Pollo', tex: 'Desmenuzado', como: 'Cocido, desmenuzado muy fino mezclado con verdura ya tolerada + AOVE' },
+      { nombre: '🥩 Ternera', tex: 'Desmenuzada', como: 'Más hierro que el pollo. Triturada con verdura. La mejor opción' },
+      { nombre: '🍐 Pera cocida', tex: 'Muy triturada', como: 'Sin piel, cocida blanda en TM7' },
+      { nombre: '🍑 Melocotón', tex: 'Triturado', como: 'Sin piel ni hueso, maduro. Triturar en TM7' },
+    ]
+  },
+  {
+    id: 's3', label: 'S3', title: 'Más variedad + legumbres',
+    nota: '2 días c/u',
+    intro: 'Amplías la variedad. Ya puedes mezclar todo lo tolerado hasta ahora. Introduces legumbres como fuente de hierro vegetal.',
+    alimentos: [
+      { nombre: '🫛 Guisantes', tex: 'Muy triturados', como: 'Cocidos bien, pasar por colador si quedan grumos' },
+      { nombre: '🫘 Judías verdes', tex: 'Muy trituradas', como: 'Al vapor, sin hebras' },
+      { nombre: '🫘 Lentejas rojas', tex: 'Muy trituradas', como: 'Con zanahoria + pimiento rojo — vitamina C mejora absorción del hierro' },
+      { nombre: '🫀 Hígado de pollo', tex: 'Triturado fino', como: 'Máx 1x/semana — altísimo en hierro pero también en vitamina A ⚠️' },
+      { nombre: '🍉 Sandía / Melón', tex: 'Triturado y colado', como: 'No chafar — queda aguachirri. Triturar en TM7 y colar' },
+      { nombre: '🥭 Mango maduro', tex: 'Chafado con tenedor', como: 'Muy maduro, denso. Se chafa bien igual que el plátano' },
+    ]
+  },
+  {
+    id: 's4', label: 'S4', title: 'Pescado + más frutas',
+    nota: '2 días c/u',
+    intro: 'Introduces el pescado blanco como nueva proteína. Primera vez solo para detectar posible alergia.',
+    alimentos: [
+      { nombre: '🐟 Merluza / Lenguado', tex: 'Desmenuzada', como: 'Al vapor, sin espinas. Primera vez sola para detectar alergia ⚠️' },
+      { nombre: '🫘 Garbanzos', tex: 'Muy triturados', como: 'Muy cocidos + AOVE. Pasar por colador' },
+      { nombre: '🍏 Manzana cocida', tex: 'Muy triturada', como: 'Sin piel, cocida blanda. Nunca cruda hasta los 8m ⚠️' },
+      { nombre: '🌾 Avena sin gluten', tex: 'Muy triturada', como: 'Holle o Smileat — con leche, en cuchara. Nunca en biberón ⚠️' },
+    ]
+  },
+  {
+    id: 's5', label: 'S5-6 ⚠️', title: 'Alérgenos principales',
+    nota: '3-5 días c/u · siempre a mediodía',
+    intro: '⚠️ Siempre a mediodía para tener el día por delante y detectar reacción. Un alérgeno nuevo cada 3-5 días.',
+    alimentos: [
+      { nombre: '🥚 Yema de huevo', tex: 'Triturada', como: 'Cocida dura. Primero solo yema, la clara después ⚠️' },
+      { nombre: '🍞 Gluten', tex: 'Trozo blando', como: 'Pan blanco sin sal blando — solo, observar 3-5 días ⚠️' },
+      { nombre: '🫙 Yogur natural', tex: 'Tal cual', como: 'Sin azúcar ni sabores. Alérgeno lácteo ⚠️' },
+      { nombre: '🥜 Crema cacahuete', tex: 'Muy diluida', como: 'Sin sal ni azúcar, muy diluida con agua. Nunca entera ⚠️' },
+    ]
+  },
+  {
+    id: 's7', label: 'S7-8 ⚠️', title: 'Más alérgenos',
+    nota: '3-5 días c/u · siempre a mediodía',
+    intro: 'Continúas con los alérgenos pendientes. Si ha tolerado todo bien hasta aquí — vas genial.',
+    alimentos: [
+      { nombre: '🥚 Clara de huevo', tex: 'Triturada', como: 'Solo tras yema tolerada sin reacción ⚠️' },
+      { nombre: '🐟 Sardina / Caballa', tex: 'Desmenuzada', como: 'Al vapor, sin espinas. Rico en hierro y omega 3. No atún rojo ⚠️' },
+      { nombre: '🍓 Fresas', tex: 'Trituradas', como: 'Maduras, sin partes blancas. Alérgeno menor ⚠️' },
+      { nombre: '🌰 Frutos secos', tex: 'Muy triturados', como: 'Solo en crema diluida — nunca enteros ni troceados ⚠️' },
+    ]
+  },
+];
+
+let activeSemana = 's1';
+
+function renderSemanas() {
+  const tabs = document.getElementById('semana-tabs');
+  tabs.innerHTML = '';
+  SEMANAS.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'stab' + (s.id === activeSemana ? ' active' : '');
+    btn.textContent = s.label;
+    btn.onclick = () => {
+      activeSemana = s.id;
+      document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderSemanaContent();
+    };
+    tabs.appendChild(btn);
+  });
+  renderSemanaContent();
+}
+
+function renderSemanaContent() {
+  const s = SEMANAS.find(x => x.id === activeSemana);
+  const cont = document.getElementById('semana-content');
+  cont.innerHTML = `
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div style="font-size:0.88rem;font-weight:700;color:var(--text)">${s.title}</div>
+        <div style="font-size:0.68rem;color:var(--text-light);background:var(--cream-mid);padding:3px 8px;border-radius:10px">${s.nota}</div>
+      </div>
+      <div style="font-size:0.73rem;color:var(--text-mid);margin-bottom:12px;line-height:1.5">${s.intro}</div>
+      ${s.alimentos.map(a => `
+        <div style="border-top:1px solid var(--border);padding:10px 0;display:flex;flex-direction:column;gap:4px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:0.82rem;font-weight:600;color:var(--text)">${a.nombre}</div>
+            <span style="font-size:0.68rem;font-weight:600;background:var(--cream-mid);color:var(--text-mid);padding:2px 8px;border-radius:10px;white-space:nowrap">${a.tex}</span>
+          </div>
+          <div style="font-size:0.73rem;color:var(--text-mid);line-height:1.5">${a.como}</div>
+        </div>
+      `).join('')}
+    </div>`;
+}
+
+// ── SIESTAS ───────────────────────────────────────────────────────────────────
+let siestas = [];
+
+function agregarSiesta() {
+  const inicio = document.getElementById('siesta-inicio').value;
+  const fin = document.getElementById('siesta-fin').value;
+  const fechaInput = document.getElementById('siesta-fecha').value;
+  if (!inicio || !fin || !fechaInput) return;
+
+  const [h1, m1] = inicio.split(':').map(Number);
+  const [h2, m2] = fin.split(':').map(Number);
+  const durMin = (h2 * 60 + m2) - (h1 * 60 + m1);
+  if (durMin <= 0) return;
+
+  const fecha = fechaInput;
+  const siesta = { inicio, fin, durMin, fecha };
+  siestas.push(siesta);
+  siestas.sort((a, b) => a.fecha.localeCompare(b.fecha) || a.inicio.localeCompare(b.inicio));
+  saveData();
+  renderSiestas();
+
+  syncToSheets({ type: 'siesta', fecha, inicio, fin, durMin })
+    .then(() => showSyncStatus('✓ Guardado en Google Sheets', true))
+    .catch(() => showSyncStatus('Guardado solo en local', false));
+
+  document.getElementById('siesta-inicio').value = '';
+  document.getElementById('siesta-fin').value = '';
+}
+
+function editarFinSiesta(idx, nuevaHora) {
+  const s = siestas[idx];
+  const [h1, m1] = s.inicio.split(':').map(Number);
+  const [h2, m2] = nuevaHora.split(':').map(Number);
+  const durMin = (h2 * 60 + m2) - (h1 * 60 + m1);
+  if (durMin <= 0) return;
+  siestas[idx].fin = nuevaHora;
+  siestas[idx].durMin = durMin;
+  const h = Math.floor(durMin / 60);
+  const m = durMin % 60;
+  const el = document.getElementById(`dur-siesta-${idx}`);
+  if (el) el.textContent = h > 0 ? `${h}h ${m}m` : `${m} min`;
+  saveData();
+  // update totals
+  const totalMin = siestas.reduce((acc, s) => acc + s.durMin, 0);
+  const th = Math.floor(totalMin / 60);
+  const tm = totalMin % 60;
+  const tn = document.getElementById('total-num');
+  const tm2 = document.getElementById('total-min');
+  if (tn) tn.textContent = siestas.length;
+  if (tm2) tm2.textContent = th > 0 ? `${th}h ${tm}m` : `${tm}m`;
+}
+
+function borrarSiesta(idx) {
+  siestas.splice(idx, 1);
+  saveData();
+  renderSiestas();
+}
+
+function renderSiestas() {
+  const log = document.getElementById('siesta-log');
+  const totales = document.getElementById('totales-siestas');
+
+  // Only show today's siestas
+  const _now = new Date();
+  const todayDate = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`;
+  const hoy = siestas.filter(s => s.fecha === todayDate);
+
+  if (hoy.length === 0) {
+    log.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:0.82rem">Aún no has registrado siestas hoy</div>';
+    totales.style.display = 'none';
+    return;
+  }
+
+  log.innerHTML = hoy.map((s, i) => {
+    const h = Math.floor(s.durMin / 60);
+    const m = s.durMin % 60;
+    const durStr = h > 0 ? `${h}h ${m}m` : `${m} min`;
+    const realIdx = siestas.indexOf(s);
+
+    // Time between this nap and previous one
+    let entreStr = '';
+    if (i > 0) {
+      const prev = hoy[i-1];
+      const [ph, pm] = prev.fin.split(':').map(Number);
+      const [sh, sm] = s.inicio.split(':').map(Number);
+      const entreMin = (sh * 60 + sm) - (ph * 60 + pm);
+      if (entreMin > 0) {
+        const eh = Math.floor(entreMin / 60);
+        const em = entreMin % 60;
+        entreStr = `<div style="font-size:0.68rem;color:var(--text-light);text-align:center;padding:4px 0">⏱ ${eh > 0 ? eh + 'h ' : ''}${em}m despierto</div>`;
+      }
+    }
+
+    return `
+      ${entreStr}
+      <div class="siesta-item">
+        <div class="siesta-dot"></div>
+        <div class="siesta-info">
+          <div class="siesta-time">${s.inicio} – <input type="time" value="${s.fin}" onchange="editarFinSiesta(${realIdx}, this.value)" style="border:none;background:transparent;font-size:0.85rem;font-weight:600;color:var(--text);width:72px;padding:0;outline:none"></div>
+          <div class="siesta-dur" id="dur-siesta-${realIdx}">${durStr}</div>
+        </div>
+        <button class="siesta-delete" onclick="borrarSiesta(${realIdx})">✕</button>
+      </div>`;
+  }).join('');
+
+  const totalMin = hoy.reduce((acc, s) => acc + s.durMin, 0);
+  const th = Math.floor(totalMin / 60);
+  const tm = totalMin % 60;
+
+  document.getElementById('total-num').textContent = hoy.length;
+  document.getElementById('total-min').textContent = th > 0 ? `${th}h ${tm}m` : `${tm}m`;
+  totales.style.display = 'flex';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+loadData();
+loadSeguimiento();
+renderSemanas();
+calcularEdad(); // auto-calcula al abrir
+renderSiestas();
+renderNoches();
+const _now = new Date();
+const todayStr = `${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,'0')}-${String(_now.getDate()).padStart(2,'0')}`;
+if (document.getElementById('diario-fecha')) document.getElementById('diario-fecha').value = todayStr;
+if (document.getElementById('crec-fecha')) document.getElementById('crec-fecha').value = todayStr;
+if (document.getElementById('siesta-fecha')) document.getElementById('siesta-fecha').value = todayStr;
+if (document.getElementById('noche-fecha')) document.getElementById('noche-fecha').value = todayStr;
+document.getElementById('diario-fecha') && document.getElementById('diario-fecha').addEventListener('change', renderDiario);
+</script>
+</body>
+</html>
